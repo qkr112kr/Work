@@ -1,0 +1,2208 @@
+function CreateNUnitsAtLoA takes integer count,integer unitId,player whichPlayer,location loc,real face returns group
+if C_W2 or C_W4 then
+if unitId=='e000' or unitId=='e001' or unitId=='e002' or unitId=='e003' or unitId=='e004' or unitId=='e005' or unitId=='ewsp' then
+set count=count*GT_WSP
+endif
+endif
+if C_Upgrade3 then
+if unitId=='h05O' then
+set count=2
+endif
+endif
+call GroupClear(bj_lastCreatedGroup)
+loop
+set count=count-1
+exitwhen count<0
+call CreateUnitAtLocSaveLast(whichPlayer,unitId,loc,face)
+call GroupAddUnit(bj_lastCreatedGroup,bj_lastCreatedUnit)
+endloop
+return bj_lastCreatedGroup
+endfunction
+function Trig_exp_ScoreSet_Actions2 takes nothing returns nothing
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFF79FFCE"+"착하고 멋진 용수님이 "+(GetPlayerName(GetOwningPlayer(GetTriggerUnit())))+"에게 날개를 달아주마!"))
+call AddSpecialEffectTargetUnitBJ("chest",GetTriggerUnit(),"YH2.mdx")
+call DisableTrigger(GetTriggeringTrigger())
+endfunction
+function InitTrig_exp_ScoreSet2 takes nothing returns nothing
+set SELECTA=CreateTrigger()
+call DisableTrigger(SELECTA)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(0),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(1),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(2),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(3),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(4),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(5),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(6),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(7),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(8),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(9),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(10),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(11),true)
+call TriggerRegisterPlayerSelectionEventBJ(SELECTA,Player(12),true)
+call TriggerAddAction(SELECTA,function Trig_exp_ScoreSet_Actions2)
+endfunction
+function Func0010 takes player loc_player01 returns force
+set force001=CreateForce()
+call ForceAddPlayer(force001,loc_player01)
+return force001
+endfunction
+function Func0023 takes nothing returns boolean
+return(((S2I(SubStringBJ(GetEventPlayerChatString(),7,8))<=9)and(S2I(SubStringBJ(GetEventPlayerChatString(),7,8))>=0)))
+endfunction
+function Func0024 takes nothing returns nothing
+set integers001[(1+GetPlayerId(GetTriggerPlayer()))]=S2I(SubStringBJ(GetEventPlayerChatString(),7,8))
+call DisplayTextToForce(bj_FORCE_ALL_PLAYERS,(GetPlayerName(GetTriggerPlayer())+("님의 로또번호는 "+(I2S(integers001[(1+GetPlayerId(GetTriggerPlayer()))])+"입니다."))))
+endfunction
+function InitTrig_trigger002 takes nothing returns nothing
+set trigger002=CreateTrigger()
+call DisableTrigger(trigger002)
+call TriggerRegisterPlayerChatEvent(trigger002,Player(0),"번호 ",false)
+call TriggerRegisterPlayerChatEvent(trigger002,Player(1),"번호 ",false)
+call TriggerRegisterPlayerChatEvent(trigger002,Player(2),"번호 ",false)
+call TriggerRegisterPlayerChatEvent(trigger002,Player(3),"번호 ",false)
+call TriggerRegisterPlayerChatEvent(trigger002,Player(4),"번호 ",false)
+call TriggerRegisterPlayerChatEvent(trigger002,Player(5),"번호 ",false)
+call TriggerRegisterPlayerChatEvent(trigger002,Player(6),"번호 ",false)
+call TriggerAddCondition(trigger002,Condition(function Func0023))
+call TriggerAddAction(trigger002,function Func0024)
+endfunction
+function Func0025 takes nothing returns boolean
+return(booleans002[(1+GetPlayerId(GetTriggerPlayer()))]==false)
+endfunction
+function Func0026 takes nothing returns nothing
+set forces002[(1+GetPlayerId(GetTriggerPlayer()))]=Func0010(GetTriggerPlayer())
+if(((booleans002[(1+GetPlayerId(GetTriggerPlayer()))]==false)))then
+set booleans002[(1+GetPlayerId(GetTriggerPlayer()))]=true
+call DisplayTextToForce(forces002[(1+GetPlayerId(GetTriggerPlayer()))],(GetPlayerName(GetTriggerPlayer())+"|cffFF2118 자동번호 ON"))
+call DisplayTextToForce(forces002[(1+GetPlayerId(GetTriggerPlayer()))],(GetPlayerName(GetTriggerPlayer())+"|cffFF2118 다시한번 입력하면 자동번호가 종료됩니다."))
+else
+set booleans002[(1+GetPlayerId(GetTriggerPlayer()))]=false
+call DisplayTextToForce(forces002[(1+GetPlayerId(GetTriggerPlayer()))],(GetPlayerName(GetTriggerPlayer())+"|cffFF2118 자동번호 OFF"))
+endif
+endfunction
+function InitTrig_trigger003 takes nothing returns nothing
+set trigger003=CreateTrigger()
+call DisableTrigger(trigger003)
+call TriggerRegisterPlayerChatEvent(trigger003,Player(0),"자동번호",true)
+call TriggerRegisterPlayerChatEvent(trigger003,Player(1),"자동번호",true)
+call TriggerRegisterPlayerChatEvent(trigger003,Player(2),"자동번호",true)
+call TriggerRegisterPlayerChatEvent(trigger003,Player(3),"자동번호",true)
+call TriggerRegisterPlayerChatEvent(trigger003,Player(4),"자동번호",true)
+call TriggerRegisterPlayerChatEvent(trigger003,Player(5),"자동번호",true)
+call TriggerRegisterPlayerChatEvent(trigger003,Player(6),"자동번호",true)
+call TriggerAddAction(trigger003,function Func0026)
+endfunction
+function Func0027 takes nothing returns nothing
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFF79FFCE"+"YS 의 로또 에디션에 오신것을 환영합니다."))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFE1FFE1"+"플레이어는 \"번호 (숫자)\"를 입력하여 자신의 번호를 정할수 있습니다."))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFE1FFE1"+"예제) 번호 7"))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFE1FFE1"+"\"자동번호\"를 입력한다면 매번 자신의 번호가 자동으로 매겨질것입니다."))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFE1FFE1"+"매시간마다 무작위로 지정되는 10개의 번호와 플레이어가 정한 번호를 비교하여"))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFE1FFE1"+"추첨번호의 숫자를 많이 맞출수록 많은 보너스를 얻게 됩니다."))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFE1FFE1"+"정할수 있는 숫자는 0~9까지 10가지가 있으며"))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFE1FFE1"+"맞추는 갯수당 상품이 달라질것입니다."))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFE1FFE1"+"5개 맞출시에는 원하는 경품을 얻게 됩니다."))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFFFE6EB"+"경품은 \"경품 (숫자)\"로 희망경품을 선택해놓을수 있으며 기본은 1번경품 입니다."))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFFFE6EB"+"예제) 경품 2"))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFFFE6EB"+"1번경품 : 나무 15개와 30000골드 입니다."))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFFFE6EB"+"2번경품 : 초월 유닛 선택권 (쿠마/레일리/사보) 입니다."))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFF4AAAA"+"제작자 사이트 https://github.com/qkr112kr/Work"))
+call DisplayTimedTextToPlayer(GetTriggerPlayer(),0,0,15.,("|CFFF4AAAA"+"플레이어 여러분의 행운을 기원합니다."))
+endfunction
+function InitTrig_trigger004 takes nothing returns nothing
+set trigger004=CreateTrigger()
+call DisableTrigger(trigger004)
+call TriggerRegisterPlayerChatEvent(trigger004,Player(0),"로또",true)
+call TriggerRegisterPlayerChatEvent(trigger004,Player(1),"로또",true)
+call TriggerRegisterPlayerChatEvent(trigger004,Player(2),"로또",true)
+call TriggerRegisterPlayerChatEvent(trigger004,Player(3),"로또",true)
+call TriggerRegisterPlayerChatEvent(trigger004,Player(4),"로또",true)
+call TriggerRegisterPlayerChatEvent(trigger004,Player(5),"로또",true)
+call TriggerRegisterPlayerChatEvent(trigger004,Player(6),"로또",true)
+call TriggerAddAction(trigger004,function Func0027)
+endfunction
+function Func0028 takes nothing returns nothing
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,25.,("◈ "+"|CFFCE4AFF로또에디션 맵입니다."))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,25.,("◈ "+"|CFFFFB0CF경품구분|R|CFFCE4AFF이 추가되었습니다."))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,25.,("◈ "+"|CFFFFB0CF\"로또\"|R|CFFCE4AFF를 입력하면 자세한 도움말을 보실수 있습니다."))
+set bj_forLoopAIndex=(1+GetPlayerId(Player(0)))
+set bj_forLoopAIndexEnd=(1+GetPlayerId(Player(11)))
+loop
+exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd
+set integers001[bj_forLoopAIndex]=GetRandomInt(0,9)
+set integers004[bj_forLoopAIndex]=1
+set bj_forLoopAIndex=bj_forLoopAIndex+1
+endloop
+endfunction
+function InitTrig_trigger005 takes nothing returns nothing
+set trigger005=CreateTrigger()
+call DisableTrigger(trigger005)
+call TriggerAddAction(trigger005,function Func0028)
+endfunction
+function Func0040 takes nothing returns nothing
+set integer004=1
+loop
+exitwhen integer004>10
+set integers003[integer004]=GetRandomInt(0,9)
+set integer004=integer004+1
+endloop
+set integer001=(integer001+1)
+call DisplayTextToForce(bj_FORCE_ALL_PLAYERS,("◎ "+(I2S(integer001)+"|r |cff646eff회 로또 추첨번호")))
+call DisplayTextToForce(bj_FORCE_ALL_PLAYERS,((I2S(integers003[1])+(" "+(I2S(integers003[2])+" ")))+((I2S(integers003[3])+" ")+(I2S(integers003[4])+(" "+I2S(integers003[5]))))))
+call DisplayTextToForce(bj_FORCE_ALL_PLAYERS,((I2S(integers003[6])+(" "+(I2S(integers003[7])+" ")))+((I2S(integers003[8])+" ")+(I2S(integers003[9])+(" "+I2S(integers003[10]))))))
+set integer003=(1+GetPlayerId(Player(0)))
+loop
+exitwhen integer003>(1+GetPlayerId(Player(11)))
+set players001[integer003]=Player(-1+(integer003))
+set forces001[integer003]=Func0010(players001[integer003])
+set integers002[integer003]=0
+if(((booleans002[integer003])))then
+set integers001[integer003]=GetRandomInt(0,9)
+endif
+if(((((GetPlayerController(players001[integer003])==MAP_CONTROL_USER)and(GetPlayerSlotState(players001[integer003])==PLAYER_SLOT_STATE_PLAYING)))))then
+call DisplayTextToForce(forces001[integer003],(GetPlayerName(players001[integer003])+"|r |cff646eff님이 찍은 번호"))
+call DisplayTextToForce(forces001[(1+GetPlayerId(players001[integer003]))],I2S(integers001[(1+GetPlayerId(players001[integer003]))]))
+set integer002=1
+loop
+exitwhen integer002>10
+if(((integers001[integer003]==integers003[integer002])))then
+set ov=GetRectCenter(br)
+call CreateNUnitsAtLoA(1*GT_WSP,'e001',players001[integer003],ov,bj_UNIT_FACING)
+call RemoveLocation(ov)
+set integers002[integer003]=(integers002[integer003]+1)
+endif
+set integer002=integer002+1
+endloop
+if(((integers002[integer003]==3)))then
+call AdjustPlayerStateBJ(1,players001[integer003],PLAYER_STATE_RESOURCE_LUMBER)
+set ov=GetRectCenter(gr)
+call CreateNUnitsAtLoA(1*GT_WSP,'e003',players001[integer003],ov,bj_UNIT_FACING)
+call RemoveLocation(ov)
+call DisplayTextToForce(bj_FORCE_ALL_PLAYERS,(GetPlayerName(players001[integer003])+"|r - |cffffA500님이 3개를 맞추어 나무 1개와 특별함 1개를 받습니다!"))
+endif
+if(((integers002[integer003]==4)))then
+call AdjustPlayerStateBJ(3,players001[integer003],PLAYER_STATE_RESOURCE_LUMBER)
+set ov=GetRectCenter(Gr)
+call CreateNUnitsAtLoA(1*GT_WSP,'e004',players001[integer003],ov,bj_UNIT_FACING)
+call RemoveLocation(ov)
+call DisplayTextToForce(bj_FORCE_ALL_PLAYERS,(GetPlayerName(players001[integer003])+"|r - |cffffA500님이 4개를 맞추어 나무 3개와 희귀함랜덤 1기를 받습니다!"))
+endif
+if(((integers002[integer003]==5)))then
+call AdjustPlayerStateBJ(10000,players001[integer003],PLAYER_STATE_RESOURCE_GOLD)
+call DisplayTextToForce(bj_FORCE_ALL_PLAYERS,(GetPlayerName(players001[integer003])+"|r - |cffffA500님이 5개를 맞추어 10000골드와 경품당첨의 보너스를 받습니다!"))
+if(((integers004[integer003]==1)))then
+call AdjustPlayerStateBJ(20000,players001[integer003],PLAYER_STATE_RESOURCE_GOLD)
+call AdjustPlayerStateBJ(15,players001[integer003],PLAYER_STATE_RESOURCE_LUMBER)
+else
+if(((integers004[integer003]==2)))then
+set ov=GetRectCenter(Jr)
+call CreateNUnitsAtLoA(1*GT_WSP,'e005',players001[integer003],ov,bj_UNIT_FACING)
+call RemoveLocation(ov)
+endif
+endif
+endif
+if(((integers002[integer003]>=6)))then
+call AdjustPlayerStateBJ(50000,players001[integer003],PLAYER_STATE_RESOURCE_GOLD)
+set ov=GetRectCenter(Wr)
+call CreateNUnitsAtLoA(1*GT_WSP,'e000',players001[integer003],ov,bj_UNIT_FACING)
+call RemoveLocation(ov)
+call DisplayTextToForce(bj_FORCE_ALL_PLAYERS,(GetPlayerName(players001[integer003])+"|r - |cffffA500님이 미친듯이 맞춰서 5만골드와 전설유닛 또는 히든유닛의 혜택을 받습니다!"))
+endif
+endif
+call DisplayTextToForce(forces001[integer003],(("|cffFF2118당첨된 갯수 : "+"|CFFF7DEF7")+(I2S(integers002[integer003])+"개")))
+set integer003=integer003+1
+endloop
+endfunction
+function InitTrig_trigger006 takes nothing returns nothing
+set trigger006=CreateTrigger()
+call DisableTrigger(trigger006)
+call TriggerRegisterTimerEventPeriodic(trigger006,70.)
+call TriggerAddAction(trigger006,function Func0040)
+endfunction
+function Func0042 takes nothing returns boolean
+return(((S2I(SubStringBJ(GetEventPlayerChatString(),7,8))<=2)and(S2I(SubStringBJ(GetEventPlayerChatString(),7,8))>=1)))
+endfunction
+function Func0046 takes nothing returns nothing
+set integers004[(1+GetPlayerId(GetTriggerPlayer()))]=S2I(SubStringBJ(GetEventPlayerChatString(),7,8))
+if(((S2I(SubStringBJ(GetEventPlayerChatString(),7,8))==1)))then
+call DisplayTextToForce(Func0010(GetTriggerPlayer()),(GetPlayerName(GetTriggerPlayer())+"|cffFF2118 원하는 경품번호 1번"))
+call DisplayTextToForce(Func0010(GetTriggerPlayer()),(GetPlayerName(GetTriggerPlayer())+"|cffFF2118 님 1번 경품은 나무 15개와 20000골드 입니다"))
+else
+if(((S2I(SubStringBJ(GetEventPlayerChatString(),7,8))==2)))then
+call DisplayTextToForce(Func0010(GetTriggerPlayer()),(GetPlayerName(GetTriggerPlayer())+"|cffFF2118 원하는 경품번호 2번"))
+call DisplayTextToForce(Func0010(GetTriggerPlayer()),(GetPlayerName(GetTriggerPlayer())+"|cffFF2118 님 2번 경품은 초월 랜덤 유닛 입니다"))
+endif
+endif
+endfunction
+function InitTrig_trigger007 takes nothing returns nothing
+set trigger007=CreateTrigger()
+call DisableTrigger(trigger007)
+call TriggerRegisterPlayerChatEvent(trigger007,Player(0),"경품 ",false)
+call TriggerRegisterPlayerChatEvent(trigger007,Player(1),"경품 ",false)
+call TriggerRegisterPlayerChatEvent(trigger007,Player(2),"경품 ",false)
+call TriggerRegisterPlayerChatEvent(trigger007,Player(3),"경품 ",false)
+call TriggerRegisterPlayerChatEvent(trigger007,Player(4),"경품 ",false)
+call TriggerRegisterPlayerChatEvent(trigger007,Player(5),"경품 ",false)
+call TriggerRegisterPlayerChatEvent(trigger007,Player(6),"경품 ",false)
+call TriggerAddCondition(trigger007,Condition(function Func0042))
+call TriggerAddAction(trigger007,function Func0046)
+endfunction
+function GT_W2 takes nothing returns boolean
+return(C_W2)
+endfunction
+function GT_W4 takes nothing returns boolean
+return(C_W4)
+endfunction
+function GT_Gold takes nothing returns boolean
+return(C_Gold)
+endfunction
+function GT_Lotto takes nothing returns boolean
+return(C_Lotto)
+endfunction
+function GT_Skip takes nothing returns boolean
+return(C_Skip)
+endfunction
+function GT_Upgrade takes nothing returns boolean
+return(C_Upgrade)
+endfunction
+function GT_Upgrade1 takes nothing returns boolean
+return(C_Upgrade1)
+endfunction
+function GT_Upgrade2 takes nothing returns boolean
+return(C_Upgrade2)
+endfunction
+function GT_Upgrade3 takes nothing returns boolean
+return(C_Upgrade3)
+endfunction
+function GTDalg_Create_Action takes nothing returns nothing
+call DialogClearBJ(GT_Dalg_Base)
+call DialogSetMessage(GT_Dalg_Base,"Cheat_Mode")
+if(GT_W2())then
+set GT_STR[1]="위습 2배 ON"
+else
+set GT_STR[1]="위습 2배 OFF"
+endif
+if(GT_W4())then
+set GT_STR[2]="위습 4배 ON"
+else
+set GT_STR[2]="위습 4배 OFF"
+endif
+if(GT_Gold())then
+set GT_STR[3]="돈무한 ON"
+else
+set GT_STR[3]="돈무한 OFF"
+endif
+if(GT_Lotto())then
+set GT_STR[4]="로또 ON"
+else
+set GT_STR[4]="로또 OFF"
+endif
+if(GT_Upgrade2())then
+set GT_STR[5]="갓적선 모드 ON (해적선 지급)"
+else
+set GT_STR[5]="갓적선 모드 OFF (해적선 지급)"
+endif
+if(GT_Upgrade3())then
+set GT_STR[6]="쿠마 2배 ON"
+else
+set GT_STR[6]="쿠마 2배 OFF"
+endif
+if(GT_Skip())then
+set GT_STR[7]="스킵 ON"
+else
+set GT_STR[7]="스킵 OFF"
+endif
+if(GT_Upgrade())then
+set GT_STR[8]="업글 맥스 ON"
+else
+set GT_STR[8]="업글 맥스 OFF"
+endif
+if(GT_Upgrade1())then
+set GT_STR[9]="업글 맥스 ON (히든 제외)"
+else
+set GT_STR[9]="업글 맥스 OFF (히든 제외)"
+endif
+set GT_STR[10]="완료"
+set bj_forLoopAIndex=1
+set bj_forLoopAIndexEnd=10
+loop
+exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd
+set GT_Dalg_select[GetForLoopIndexA()]=DialogAddButtonBJ(GT_Dalg_Base,"* "+GT_STR[GetForLoopIndexA()])
+set bj_forLoopAIndex=bj_forLoopAIndex+1
+endloop
+call DialogDisplayBJ(true,GT_Dalg_Base,Player(0))
+endfunction
+function InitTrig_GTDS_T takes nothing returns nothing
+set GTDalg_Creats_T=CreateTrigger()
+call TriggerRegisterPlayerChatEvent(GTDalg_Creats_T,Player(0),"-치트모드",false)
+call TriggerAddAction(GTDalg_Creats_T,function GTDalg_Create_Action)
+endfunction
+function GTDalg_Effect_W2 takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[1])
+endfunction
+function GTDalg_Effect_W4 takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[2])
+endfunction
+function GTDalg_Effect_Gold takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[3])
+endfunction
+function GTDalg_Effect_Lotto takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[4])
+endfunction
+function GTDalg_Effect_Skip takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[7])
+endfunction
+function GTDalg_Effect_Upgrade takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[8])
+endfunction
+function GTDalg_Effect_Complete takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[10])
+endfunction
+function GTDalg_Effect_Upgrade1 takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[9])
+endfunction
+function GTDalg_Effect_Upgrade2 takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[5])
+endfunction
+function GTDalg_Effect_Upgrade3 takes nothing returns boolean
+return(GetClickedButton()==GT_Dalg_select[6])
+endfunction
+function C2_W2 takes nothing returns boolean
+return(C_W2==false)
+endfunction
+function C3_W2 takes nothing returns boolean
+return(C_W2)
+endfunction
+function C2_W4 takes nothing returns boolean
+return(C_W4==false)
+endfunction
+function C3_W4 takes nothing returns boolean
+return(C_W4)
+endfunction
+function C2_Gold takes nothing returns boolean
+return(C_Gold==false)
+endfunction
+function C3_Gold takes nothing returns boolean
+return(C_Gold)
+endfunction
+function C2_Lotto takes nothing returns boolean
+return(C_Lotto==false)
+endfunction
+function C3_Lotto takes nothing returns boolean
+return(C_Lotto)
+endfunction
+function C2_Skip takes nothing returns boolean
+return(C_Skip==false)
+endfunction
+function C3_Skip takes nothing returns boolean
+return(C_Skip)
+endfunction
+function C2_Upgrade takes nothing returns boolean
+return(C_Upgrade==false)
+endfunction
+function C3_Upgrade takes nothing returns boolean
+return(C_Upgrade)
+endfunction
+function C2_Upgrade1 takes nothing returns boolean
+return(C_Upgrade1==false)
+endfunction
+function C3_Upgrade1 takes nothing returns boolean
+return(C_Upgrade1)
+endfunction
+function C2_Upgrade2 takes nothing returns boolean
+return(C_Upgrade2==false)
+endfunction
+function C3_Upgrade2 takes nothing returns boolean
+return(C_Upgrade2)
+endfunction
+function C2_Upgrade3 takes nothing returns boolean
+return(C_Upgrade3==false)
+endfunction
+function C3_Upgrade3 takes nothing returns boolean
+return(C_Upgrade3)
+endfunction
+function GT_UpgradeComplete_Func001 takes integer techid returns boolean
+return((techid=='R004')or(techid=='R005')or(techid=='R00I')or(techid=='R00X')or(techid=='R02F')or(techid=='R01V')or(techid=='R02E')or(techid=='R02D')or(techid=='R00K')or(techid=='R00N')or(techid=='R010')or(techid=='R00P')or(techid=='R01U')or(techid=='R00E')or(techid=='R00S')or(techid=='R02G')or(techid=='R00O')or(techid=='R015')or(techid=='R00Z')or(techid=='R01E')or(techid=='R01C')or(techid=='R01B')or(techid=='R01D')or(techid=='R018')or(techid=='R01A')or(techid=='R003'))
+endfunction
+function GT_UpgradeComplete_Func002 takes integer techid returns boolean
+return((techid=='R004')or(techid=='R005')or(techid=='R00I')or(techid=='R00X')or(techid=='R02F')or(techid=='R01V')or(techid=='R02E')or(techid=='R02D')or(techid=='R00K')or(techid=='R00N')or(techid=='R010')or(techid=='R00P')or(techid=='R01U')or(techid=='R00E')or(techid=='R00S')or(techid=='R02G')or(techid=='R00O')or(techid=='R015')or(techid=='R00Z')or(techid=='R01E')or(techid=='R01C')or(techid=='R01B')or(techid=='R01D')or(techid=='R018')or(techid=='R01A')or(techid=='R003')or(techid=='R01K')or(techid=='R01L')or(techid=='R007')or(techid=='R01M'))
+endfunction
+function GT_Start_Func001 takes nothing returns boolean
+return(GetPlayerSlotState(Player(-1+(bj_forLoopAIndex)))==PLAYER_SLOT_STATE_PLAYING)and(GetPlayerController(Player(-1+(bj_forLoopAIndex)))!=MAP_CONTROL_COMPUTER)
+endfunction
+function GTDalg_Select_Actions takes nothing returns nothing
+local integer techid='R000'
+if(GTDalg_Effect_W2())then
+if(C2_W2())then
+set C_W2=true
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF0080"+"방장이 위습 2배 모드를 ON 하셨습니다.")
+else
+set C_W2=false
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFF0080FF"+"방장이 위습 2배 모드를 OFF 하셨습니다.")
+endif
+call TriggerExecute(GTDalg_Creats_T)
+else
+if(GTDalg_Effect_W4())then
+if(C2_W4())then
+set C_W4=true
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF0080"+"방장이 위습 4배 모드를 ON 하셨습니다.")
+else
+set C_W4=false
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFF0080FF"+"방장이 위습 4배 모드를 OFF 하셨습니다.")
+endif
+call TriggerExecute(GTDalg_Creats_T)
+else
+if(GTDalg_Effect_Gold())then
+if(C2_Gold())then
+set C_Gold=true
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF0080"+"방장이 돈무한 모드를 ON 하셨습니다.")
+else
+set C_Gold=false
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFF0080FF"+"방장이 돈무한 모드를 OFF 하셨습니다.")
+endif
+call TriggerExecute(GTDalg_Creats_T)
+else
+if(GTDalg_Effect_Lotto())then
+if(C2_Lotto())then
+set C_Lotto=true
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF0080"+"방장이 로또 모드를 ON 하셨습니다.")
+else
+set C_Lotto=false
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFF0080FF"+"방장이 로또 모드를 OFF 하셨습니다.")
+endif
+call TriggerExecute(GTDalg_Creats_T)
+else
+if(GTDalg_Effect_Skip())then
+if(C2_Skip())then
+set C_Skip=true
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF0080"+"방장이 스킵 모드를 ON 하셨습니다.")
+else
+set C_Skip=false
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFF0080FF"+"방장이 스킵 모드를 OFF 하셨습니다.")
+endif
+call TriggerExecute(GTDalg_Creats_T)
+else
+if(GTDalg_Effect_Upgrade())then
+if(C2_Upgrade())then
+set C_Upgrade=true
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF0080"+"방장이 업글 맥스 모드를 ON 하셨습니다.")
+else
+set C_Upgrade=false
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFF0080FF"+"방장이 업글 맥스 모드를 OFF 하셨습니다.")
+endif
+call TriggerExecute(GTDalg_Creats_T)
+else
+if(GTDalg_Effect_Upgrade1())then
+if(C2_Upgrade1())then
+set C_Upgrade1=true
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF0080"+"방장이 업글 맥스 모드(히든제외)를 ON 하셨습니다.")
+else
+set C_Upgrade1=false
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFF0080FF"+"방장이 업글 맥스 모드(히든제외)를 OFF 하셨습니다.")
+endif
+call TriggerExecute(GTDalg_Creats_T)
+else
+if(GTDalg_Effect_Upgrade2())then
+if(C2_Upgrade2())then
+set C_Upgrade2=true
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF0080"+"방장이 갓적선 모드를 ON 하셨습니다.(해적선이 하나씩 지급됩니다.)")
+else
+set C_Upgrade2=false
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFF0080FF"+"방장이 갓적선 모드를 ON 하셨습니다.")
+endif
+call TriggerExecute(GTDalg_Creats_T)
+else
+if(GTDalg_Effect_Upgrade3())then
+if(C2_Upgrade3())then
+set C_Upgrade3=true
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF0080"+"방장이 쿠마 2배 모드를 ON 하셨습니다.")
+else
+set C_Upgrade3=false
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFF0080FF"+"방장이 쿠마 2배 모드를 OFF 하셨습니다.")
+endif
+call TriggerExecute(GTDalg_Creats_T)
+else
+if(GTDalg_Effect_Complete())then
+if(C3_W2())then
+set bj_forLoopAIndex=1
+set bj_forLoopAIndexEnd=5
+loop
+exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd
+if(GT_Start_Func001())then
+set ov=GetRectCenter(Po)
+call CreateNUnitsAtLoc(5*GT_WSP,'ewsp',Player(-1+(bj_forLoopAIndex)),ov,bj_UNIT_FACING)
+call RemoveLocation(ov)
+endif
+set bj_forLoopAIndex=bj_forLoopAIndex+1
+endloop
+set GT_WSP=2
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF8000"+"처음에 받지못한 위습 5마리를 지급합니다.")
+endif
+if(C3_W4())then
+set bj_forLoopAIndex=1
+set bj_forLoopAIndexEnd=5
+loop
+exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd
+if(GT_Start_Func001())then
+set ov=GetRectCenter(Po)
+call CreateNUnitsAtLoc(15*GT_WSP,'ewsp',Player(-1+(bj_forLoopAIndex)),ov,bj_UNIT_FACING)
+call RemoveLocation(ov)
+endif
+set bj_forLoopAIndex=bj_forLoopAIndex+1
+endloop
+set GT_WSP=4
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,30,"|CFFFF8000"+"처음에 받지못한 위습 15마리를 지급합니다.")
+endif
+if(C3_Gold())then
+set bj_forLoopAIndex=1
+set bj_forLoopAIndexEnd=7
+loop
+exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd
+call SetPlayerStateBJ(Player(-1+(bj_forLoopAIndex)),PLAYER_STATE_RESOURCE_GOLD,10000000)
+set bj_forLoopAIndex=bj_forLoopAIndex+1
+endloop
+endif
+if(C3_Lotto())then
+call EnableTrigger(trigger002)
+call EnableTrigger(trigger003)
+call EnableTrigger(trigger004)
+call EnableTrigger(trigger006)
+call EnableTrigger(trigger007)
+call PolledWait(5.)
+call TriggerExecute(trigger005)
+else
+call DisableTrigger(trigger002)
+call DisableTrigger(trigger003)
+call DisableTrigger(trigger004)
+call DisableTrigger(trigger005)
+call DisableTrigger(trigger006)
+call DisableTrigger(trigger007)
+endif
+if(C3_Skip())then
+call EnableTrigger(GTDiag_Skip_T)
+else
+call DisableTrigger(GTDiag_Skip_T)
+endif
+if(C3_Upgrade())then
+loop
+exitwhen techid>'R034'
+if(not(GT_UpgradeComplete_Func001(techid)))then
+set bj_forLoopAIndex=1
+set bj_forLoopAIndexEnd=5
+loop
+exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd
+call SetPlayerTechResearched(Player(-1+bj_forLoopAIndex),techid,GetPlayerTechCount(Player(-1+(bj_forLoopAIndex)),techid,true)+30)
+set bj_forLoopAIndex=bj_forLoopAIndex+1
+endloop
+endif
+if(techid=='R009')then
+set techid='R00A'
+elseif(techid=='R00Z')then
+set techid='R010'
+elseif(techid=='R019')then
+set techid='R01A'
+elseif(techid=='R01Z')then
+set techid='R020'
+elseif(techid=='R029')then
+set techid='R02A'
+elseif(techid=='R02Z')then
+set techid='R030'
+else
+set techid=techid+1
+endif
+endloop
+endif
+if(C3_Upgrade1())then
+loop
+exitwhen techid>'R03Z'
+if(not(GT_UpgradeComplete_Func002(techid)))then
+set bj_forLoopAIndex=1
+set bj_forLoopAIndexEnd=5
+loop
+exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd
+call SetPlayerTechResearched(Player(-1+bj_forLoopAIndex),techid,GetPlayerTechCount(Player(-1+(bj_forLoopAIndex)),techid,true)+30)
+set bj_forLoopAIndex=bj_forLoopAIndex+1
+endloop
+endif
+if(techid=='R009')then
+set techid='R00A'
+elseif(techid=='R00Z')then
+set techid='R010'
+elseif(techid=='R019')then
+set techid='R01A'
+elseif(techid=='R01Z')then
+set techid='R020'
+elseif(techid=='R029')then
+set techid='R02A'
+elseif(techid=='R02Z')then
+set techid='R030'
+elseif(techid=='R039')then
+set techid='R03A'
+else
+set techid=techid+1
+endif
+endloop
+endif
+if(C3_Upgrade2())then
+set bj_forLoopAIndex=1
+set bj_forLoopAIndexEnd=5
+loop
+exitwhen bj_forLoopAIndex>bj_forLoopAIndexEnd
+if(GT_Start_Func001())then
+call CreateNUnitsAtLoA(1,'h02J',Player(-1+bj_forLoopAIndex),Qe,bj_UNIT_FACING)
+endif
+set bj_forLoopAIndex=bj_forLoopAIndex+1
+endloop
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,10.,"|cffFF0000 해적선이 스토리에 생성 되었습니다.|r")
+endif
+if(C3_Upgrade3())then
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,10.,"|cffFF0000 초월 쿠마를 뽑을시 2마리가 생성됩니다.|r")
+endif
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20,"|c00ff1700설|r|c00ff2e00정|r|c00ff4600이|r|c00ff5d00 |r|c00ff7400완|r|c00ff8b00료|r|c00ffa200되|r|c00ffb900었|r|c00ffd100습|r|c00ffe800니|r|c00ffff00다.|r")
+call DestroyTrigger(GTDalg_Creats_T)
+endif
+endif
+endif
+endif
+endif
+endif
+endif
+endif
+endif
+endif
+endfunction
+function InitTrig_GTES_T takes nothing returns nothing
+set GTDiag_Select_T=CreateTrigger()
+call TriggerRegisterDialogEvent(GTDiag_Select_T,GT_Dalg_Base)
+call TriggerAddAction(GTDiag_Select_T,function GTDalg_Select_Actions)
+endfunction
+function GTDalg_Skip_Actions takes nothing returns nothing
+if U<=30 then
+call StartTimerBJ(ce[1],false,.01)
+call StartTimerBJ(T,false,.01)
+else
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20,"|c00ff1700 31라운드 이상은 사용이 불가능합니다.|r")
+endif
+endfunction
+function InitTrig_GTSC_T takes nothing returns nothing
+set GTDiag_Skip_T=CreateTrigger()
+call DisableTrigger(GTDiag_Skip_T)
+call TriggerRegisterPlayerChatEvent(GTDiag_Skip_T,Player(0),"-스킵",true)
+call TriggerAddAction(GTDiag_Skip_T,function GTDalg_Skip_Actions)
+endfunction
+function GT_Display_Actions takes nothing returns nothing
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFE1FFE1"+"-----------------------------------------------"))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFF79FFCE"+"YS 의 치트 에디션에 오신것을 환영합니다."))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFE1FFE1"+"이 치트 모드는 YS 가 만들었습니다."))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFE1FFE1"+"▽ 현재 치트 모드에 있는 치트 목록 ▽ "))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFE1FFE1"+"위습 2배 / 위습 4배 / 돈무한 / 로또 / 갓적선 / 쿠마 2배 / 스킵 / 업글 맥스"))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFE1FFE1"+"방장만 설정가능하오니 서로 타협하여 모드를 선택하여 주세요."))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFE1FFE1"+"기회는 한번 뿐이니 신중하게 해주시길 바랍니다."))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFE1FFE1"+"시작하려면 '-치트모드'를 입력하세요"))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFE1FFE1"+"------------------------------------------------"))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFF4AAAA"+"제작자 사이트 https://github.com/qkr112kr/Work"))
+call DisplayTimedTextToForce(bj_FORCE_ALL_PLAYERS,20.,("|CFFF4AAAA"+"플레이어 여러분의 행운을 기원합니다."))
+endfunction
+function InitTrig_GTDD_T takes nothing returns nothing
+set GTDiag_Display_T=CreateTrigger()
+call TriggerRegisterTimerEventSingle(GTDiag_Display_T,3.)
+call TriggerAddAction(GTDiag_Display_T,function GT_Display_Actions)
+endfunction
+function ND2P takes player toPlayer,real x,real y,real duration,string message returns nothing
+if(DIALOG3[GetPlayerId(toPlayer)]==true)then
+call DisplayTimedTextToPlayer(toPlayer,x,y,duration,message)
+endif
+endfunction
+function Getting_CheatEvent takes integer i2i,trigger trig,player p2p returns nothing
+set Selected_Check[(20*i2i)+GetPlayerId(p2p)]=p2p
+if CheatActionCheck[(20*i2i)+GetPlayerId(p2p)]!=p2p then
+set CheatActionCheck[(20*i2i)+GetPlayerId(p2p)]=p2p
+call TriggerRegisterPlayerUnitEvent(trig,p2p,EVENT_PLAYER_UNIT_SELECTED,null)
+endif
+endfunction
+function Getting_CheatActions takes integer i2i,trigger whichTrigger,code actionFunc returns nothing
+if CheatActionCheck[i2i]!=ConvertedPlayer(i2i)then
+set CheatActionCheck[i2i]=ConvertedPlayer(i2i)
+call TriggerAddAction(whichTrigger,actionFunc)
+endif
+endfunction
+function ONnOFF takes string s2s returns integer
+local integer fi2i=0
+if((SubStringBJ(s2s,1,2)=="ON")or(SubStringBJ(s2s,1,2)=="on")or(SubStringBJ(s2s,1,3)=="온"))then
+set fi2i=31
+return fi2i
+elseif((SubStringBJ(s2s,1,3)=="OFF")or(SubStringBJ(s2s,1,3)=="off")or(SubStringBJ(s2s,1,6)=="오프"))then
+set fi2i=63
+return fi2i
+elseif((SubStringBJ(s2s,1,3)=="초"))then
+set fi2i=3
+return fi2i
+elseif(SubStringBJ(s2s,1,3)=="ALL")or(SubStringBJ(s2s,1,3)=="all")or(SubStringBJ(s2s,1,3)=="올")then
+set fi2i=4
+return fi2i
+else
+set fi2i=S2I(SubStringBJ(s2s,1,7))
+return fi2i
+endif
+endfunction
+function KickcheatP takes player p returns nothing
+if GetLocalPlayer()==p then
+call DisplayTextToPlayer(p,0,0,GetPlayerName(Player(-1)))
+endif
+endfunction
+function ItemRangeClear takes nothing returns nothing
+call RemoveItem(GetEnumItem())
+endfunction
+function NS2U takes player fp2p,string message returns unit
+if(udg_rcUnit[GetPlayerId(fp2p)]==null)then
+call ND2P(fp2p,0,0,5.00,("|cffff0000주의! 선택된 유닛이 없습니다.|r"+""))
+return null
+elseif(IsUnitType(udg_rcUnit[GetPlayerId(fp2p)],UNIT_TYPE_HERO)==false and udg_rcUnit[GetPlayerId(fp2p)]!=null)then
+call ND2P(fp2p,0,0,5.00,(("|cffff4500"+"현재 "+"|cffffbe0a선택|r"+"되어있는 유닛은"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(fp2p)]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(fp2p)])+"|r |cff2c952c이(가)|r |cffffbe0a선택|r|cff2c952c되어 있습니다.|r")))
+call ND2P(fp2p,0,0,5.00,("|cffff0000주의! 선택된 유닛은 영웅이 아닙니다.|r"+""))
+return udg_rcUnit[GetPlayerId(fp2p)]
+else
+call ND2P(fp2p,0,0,5.00,message)
+return udg_rcUnit[GetPlayerId(fp2p)]
+endif
+endfunction
+function NS3U takes player fp2p,integer fi2i,string message,string message2,string message3 returns unit
+if(udg_rcUnit[GetPlayerId(fp2p)]==null)then
+call ND2P(fp2p,0,0,5.00,("|cffff0000주의! 선택된 유닛이 없습니다.|r"+""))
+return null
+elseif(IsUnitType(udg_rcUnit[GetPlayerId(fp2p)],UNIT_TYPE_HERO)==false)then
+call ND2P(fp2p,0,0,5.00,("|cffff0000주의! 선택된 유닛은 영웅이 아닙니다.|r"+""))
+return udg_rcUnit[GetPlayerId(fp2p)]
+elseif fi2i==31 then
+call ND2P(fp2p,0,0,5.00,message)
+return udg_rcUnit[GetPlayerId(fp2p)]
+elseif fi2i==63 then
+call ND2P(fp2p,0,0,5.00,message2)
+return udg_rcUnit[GetPlayerId(fp2p)]
+else
+call ND2P(fp2p,0,0,5.00,message3)
+return udg_rcUnit[GetPlayerId(fp2p)]
+endif
+endfunction
+function Getting_SpecialList takes integer i2i returns boolean
+local player p2p=Player(i2i)
+return(GetPlayerName(p2p)=="qkr112kr")
+endfunction
+function Cheat_Start_Setting takes nothing returns nothing
+if(GetClickedButtonBJ()==DIALOG2[1])then
+if(GT_Privilege[GetPlayerId(GetTriggerPlayer())]>50)then
+set DIALOG3[GetPlayerId(GetTriggerPlayer())]=true
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cffFF0000당신은 특권자 입니다!|r"))
+call PolledWait(0.01)
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|r*|r |cffFFB1BCThanks to used |cffFFFA78YS Cheat Maps Welcome! |r|r*"+" "))
+else
+set DIALOG3[GetPlayerId(GetTriggerPlayer())]=true
+call PolledWait(0.01)
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|r*|r |cffFFB1BCThanks to used |cffFFFA78YS Cheat Maps Welcome! |r|r*"+" "))
+call PolledWait(0.01)
+call ND2P(GetTriggerPlayer(),0,0,15.00,("5 . |cffCD0000자동으로 리플레이가|r |cffEE84EA삭제 됩니다|r |cff6482FF"+" "))
+endif
+else
+if(GetClickedButtonBJ()==DIALOG2[2])then
+set DIALOG3[GetPlayerId(GetTriggerPlayer())]=false
+endif
+endif
+endfunction
+function Getting_Select takes nothing returns nothing
+if Selected_Check[(20*1)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+if Player(GetPlayerId(GetOwningPlayer(GetTriggerUnit())))==Player(GetPlayerId(GetTriggerPlayer()))then
+set udg_rcUnit[GetPlayerId(GetTriggerPlayer())]=GetTriggerUnit()
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+"|r |cff2c952c이(가)|r |cffffbe0a선택|r|cff2c952c되었습니다.|r")))
+call TriggerRegisterUnitEvent(REDUCE,GetTriggerUnit(),EVENT_UNIT_DAMAGED)
+call TriggerRegisterUnitEvent(BLOOD,GetTriggerUnit(),EVENT_UNIT_DAMAGED)
+else
+if GT_Privilege[GetPlayerId(GetOwningPlayer(GetTriggerUnit()))]>=GT_Privilege[GetPlayerId(GetTriggerPlayer())]then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! 해당 유닛은 특권 치트 소유자의 유닛입니다. 당신은 선택할 수 없습니다.|r"+""))
+else
+set udg_rcUnit[GetPlayerId(GetTriggerPlayer())]=GetTriggerUnit()
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+"|r |cff2c952c이(가)|r |cffffbe0a선택|r|cff2c952c되었습니다.|r")))
+call TriggerRegisterUnitEvent(REDUCE,GetTriggerUnit(),EVENT_UNIT_DAMAGED)
+call TriggerRegisterUnitEvent(BLOOD,GetTriggerUnit(),EVENT_UNIT_DAMAGED)
+endif
+endif
+endif
+set Selected_Check[(20*1)+GetPlayerId(GetTriggerPlayer())]=null
+endfunction
+function Getting_hyphen takes integer hyphen returns string
+local integer hyphen2=1
+local string hyphen3=""
+loop
+exitwhen hyphen2>hyphen
+set hyphen3=hyphen3+"-"
+set hyphen2=hyphen2+1
+endloop
+return hyphen3
+endfunction
+function Getting_at takes integer fat returns string
+local integer fat2=1
+local string fat3=""
+loop
+exitwhen fat2>fat
+set fat3=fat3+"A"
+set fat2=fat2+1
+endloop
+return fat3
+endfunction
+function Getting_hyphenInsert takes string inst returns string
+return inst+Getting_at(Before_Time)+Getting_hyphen(After_Time)
+endfunction
+function Getting_atInsert takes string inst returns string
+return inst+Getting_at(Before_Time)
+endfunction
+function Getting_Shadow2 takes nothing returns boolean
+return(IsUnitIllusionBJ(GetFilterUnit())and Selected_Check[(20*24)+EndlessI]==GetLocalPlayer())
+endfunction
+function Getting_Shadow3 takes nothing returns nothing
+call SetUnitVertexColorBJ(GetEnumUnit(),10.,38.,100,.0)
+endfunction
+function Getting_Regen1 takes nothing returns boolean
+return(GetFilterUnit()!=udg_rcUnit[REEndlessI])
+endfunction
+function Getting_GroupCoolTime1 takes nothing returns boolean
+return(GetFilterUnit()!=udg_rcUnit[CUnitC[100+EndlessI]])
+endfunction
+function Getting_GroupCoolTime2 takes nothing returns nothing
+call UnitResetCooldown(GetEnumUnit())
+endfunction
+function Getting_Regen2 takes nothing returns nothing
+call SetUnitLifeBJ(GetEnumUnit(),(GetUnitStateSwap(UNIT_STATE_LIFE,GetEnumUnit())+EndlessR[40+REEndlessI]))
+call SetUnitManaBJ(GetEnumUnit(),(GetUnitStateSwap(UNIT_STATE_MANA,GetEnumUnit())+EndlessR[60+REEndlessI]))
+endfunction
+function Getting_REEndless takes nothing returns nothing
+set bj_wantDestroyGroup=true
+set REEndlessI=0
+loop
+exitwhen REEndlessI>11
+call SetUnitLifeBJ(udg_rcUnit[REEndlessI],(GetUnitStateSwap(UNIT_STATE_LIFE,udg_rcUnit[REEndlessI])+EndlessR[REEndlessI]))
+call SetUnitManaBJ(udg_rcUnit[REEndlessI],(GetUnitStateSwap(UNIT_STATE_MANA,udg_rcUnit[REEndlessI])+EndlessR[20+REEndlessI]))
+call ForGroupBJ(GetUnitsOfPlayerMatching(udg_rcPlayer[REEndlessI],Condition(function Getting_Regen1)),function Getting_Regen2)
+set REEndlessI=REEndlessI+1
+endloop
+endfunction
+function Getting_Endless takes nothing returns nothing
+set bj_wantDestroyGroup=true
+set EndlessI=0
+loop
+exitwhen EndlessI>11
+call UnitResetCooldown(udg_rcUnit[CUnitC[EndlessI]])
+call SetPlayerStateBJ(udg_rcPlayer[CUnitC[20+EndlessI]],PLAYER_STATE_RESOURCE_FOOD_USED,0)
+call SetPlayerStateBJ(udg_rcPlayer[CUnitC[20+EndlessI]],PLAYER_STATE_RESOURCE_FOOD_CAP,GetPlayerState(udg_rcPlayer[CUnitC[20+EndlessI]],PLAYER_STATE_FOOD_CAP_CEILING))
+call SetUnitLifePercentBJ(udg_rcUnit[CUnitC[40+EndlessI]],100)
+call SetUnitManaPercentBJ(udg_rcUnit[CUnitC[60+EndlessI]],100)
+call SetUnitMoveSpeed(udg_rcUnit[CUnitC[80+EndlessI]],EndlessR[80+CUnitC[80+EndlessI]])
+call ForGroupBJ(GetUnitsInRectMatching(GetPlayableMapRect(),Condition(function Getting_Shadow2)),function Getting_Shadow3)
+call ForGroupBJ(GetUnitsOfPlayerMatching(udg_rcPlayer[CUnitC[100+EndlessI]],Condition(function Getting_GroupCoolTime1)),function Getting_GroupCoolTime2)
+set EndlessI=EndlessI+1
+endloop
+endfunction
+function Getting_Shaodw takes integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*24)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+call ND2P(GetTriggerPlayer(),0,0,5.,("|cffffbe0a분신|r|cff2c952c을 |cffff0000구별|r |cff2c952c해줍니다.|r |cffff0000(다른 플레이어는 구분되지 않습니다.)|r"+" "))
+call EnableTrigger(ENDLESS)
+elseif fi2i==63 then
+set Selected_Check[(20*24)+GetPlayerId(GetTriggerPlayer())]=null
+call ND2P(GetTriggerPlayer(),0,0,5.,("|cffffbe0a분신 구별|r|cff2c952c을|r |cffff0000중단|r |cff2c952c합니다.|r"+" "))
+endif
+endfunction
+function Getting_Speed takes integer fi2i returns nothing
+local player fp2p=GetTriggerPlayer()
+if fi2i==3 then
+set CUnitC[80+GetPlayerId(fp2p)]=100
+call SetUnitMoveSpeed(NS2U(fp2p,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(fp2p)]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(fp2p)])+("|r |cff2c952c의|r |cffffbe0a이동 속도|r|cff2c952c를|r |cffff0000초기값 ("+(I2S(R2I(GetUnitDefaultMoveSpeed(udg_rcUnit[GetPlayerId(fp2p)])))+")|r |cff2c952c(으)로 변경합니다.|r"))))),GetUnitDefaultMoveSpeed(udg_rcUnit[GetPlayerId(fp2p)]))
+else
+call ND2P(fp2p,0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(fp2p)]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(fp2p)])+("|r |cff2c952c의|r |cffffbe0a이동 속도|r|cff2c952c를|r |cffff0000"+I2S(fi2i)+"|r |cff2c952c로 변경합니다.|r"))))
+set EndlessR[80+GetPlayerId(fp2p)]=fi2i
+set CUnitC[80+GetPlayerId(fp2p)]=GetPlayerId(fp2p)
+call EnableTrigger(ENDLESS)
+endif
+endfunction
+function Getting_Healing takes unit fu2u,integer fi2i returns nothing
+if fi2i<=1 then
+call SetUnitLifePercentBJ(fu2u,100)
+call SetUnitManaPercentBJ(fu2u,100)
+else
+call SetUnitLifePercentBJ(fu2u,fi2i)
+call SetUnitManaPercentBJ(fu2u,fi2i)
+endif
+endfunction
+function Getting_Check takes nothing returns nothing
+local integer i2i=0
+loop
+exitwhen i2i>11
+if GT_Privilege[i2i]>=99 then
+call ND2P(GetTriggerPlayer(),0,0,10.00,("|cff"+Player_Color[i2i]+(I2S(i2i+1)+(". "+(GetPlayerName(Player(i2i))+("|r - |cffffbe0a금 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_GOLD))+(", |cff2c952c나무 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_LUMBER))+(", |cff646eff유닛상황 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_USED))+("|cff646464/|r"+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_CAP))+", |cff646eff점수 :|r "+(I2S(GT_Privilege[i2i]))+" |cff0000ff(특권 치트 사용자)|r")))))))))))))
+elseif GT_Privilege[i2i]>=50 then
+call ND2P(GetTriggerPlayer(),0,0,10.00,("|cff"+Player_Color[i2i]+(I2S(i2i+1)+(". "+(GetPlayerName(Player(i2i))+("|r - |cffffbe0a금 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_GOLD))+(", |cff2c952c나무 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_LUMBER))+(", |cff646eff유닛상황 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_USED))+("|cff646464/|r"+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_CAP))+", |cff646eff점수 :|r "+(I2S(GT_Privilege[i2i]))+" |cffff0000(치트 사용자)|r")))))))))))))
+elseif GT_Privilege[i2i]>=25 then
+call ND2P(GetTriggerPlayer(),0,0,10.00,("|cff"+Player_Color[i2i]+(I2S(i2i+1)+(". "+(GetPlayerName(Player(i2i))+("|r - |cffffbe0a금 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_GOLD))+(", |cff2c952c나무 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_LUMBER))+(", |cff646eff유닛상황 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_USED))+("|cff646464/|r"+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_CAP))+", |cff646eff점수 :|r "+(I2S(GT_Privilege[i2i]))+" |cffff4500(제한 치트 사용자)|r")))))))))))))
+elseif GT_Privilege[i2i]==0 then
+call ND2P(GetTriggerPlayer(),0,0,10.00,("|cff"+Player_Color[i2i]+(I2S(i2i+1)+(". "+(GetPlayerName(Player(i2i))+("|r - |cffffbe0a금 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_GOLD))+(", |cff2c952c나무 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_LUMBER))+(", |cff646eff유닛상황 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_USED))+("|cff646464/|r"+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_CAP))+", |cff646eff점수 :|r "+(I2S(GT_Privilege[i2i]))+" |cff808000(치트 금지자)|r")))))))))))))
+else
+call ND2P(GetTriggerPlayer(),0,0,10.00,("|cff"+Player_Color[i2i]+(I2S(i2i+1)+(". "+(GetPlayerName(Player(i2i))+("|r - |cffffbe0a금 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_GOLD))+(", |cff2c952c나무 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_LUMBER))+(", |cff646eff유닛상황 :|r "+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_USED))+("|cff646464/|r"+(I2S(GetPlayerState(Player(i2i),PLAYER_STATE_RESOURCE_FOOD_CAP))+", |cff646eff점수 :|r "+(I2S(GT_Privilege[i2i]))+"")))))))))))))
+endif
+set i2i=i2i+1
+endloop
+endfunction
+function Getting_GivingCheat takes integer fi2i returns nothing
+set fi2i=fi2i-1
+if GT_Privilege[GetPlayerId(GetTriggerPlayer())]<=49 then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(GetTriggerPlayer())+"님은 제한된 치트 권한을 가지고 있습니다.|r")))
+else
+if udg_rcPlayer[fi2i]!=Player(fi2i)then
+set udg_rcPlayer[fi2i]=Player(fi2i)
+set GT_Privilege[fi2i]=25
+call ForceAddPlayer(CHEATER,Player(fi2i))
+call TriggerRegisterPlayerChatEvent(CHEATS,Player(fi2i),"",false)
+set DIALOG3[fi2i]=true
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000"+(GetPlayerName(Player(fi2i))+"|r |cff2c952c에게|r |cffffbe0a치트 권한|r|cff2c952c을 주었습니다.|r")))
+call ND2P(Player(fi2i),0,0,15.00,("|cffff0000>>>|r |cff646464YS|r |cff646eff의|r |cff288C28치트맵입니다.|r"+""))
+call ND2P(Player(fi2i),0,0,5.00,("|cffff0000"+(GetPlayerName(GetTriggerPlayer())+"|r |cff2c952c님께서 당신에게|r |cffffbe0a치트 권한|r|cff2c952c을 주었습니다.|r |cffff0000(주의! 모든 치트를 사용할 수는 없습니다.)|r")))
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(Player(fi2i))+"는 이미 치트 권한을 가지고 있습니다.|r")))
+endif
+endif
+endfunction
+function Getting_BanCheat takes nothing returns nothing
+local integer i2i=0
+if GT_Privilege[GetPlayerId(GetTriggerPlayer())]<=49 then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(GetTriggerPlayer())+"님은 제한된 치트 권한을 가지고 있습니다.|r")))
+else
+loop
+exitwhen i2i>11
+if(GT_Privilege[i2i]>=GT_Privilege[GetPlayerId(GetTriggerPlayer())])then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(Player(i2i))+"는 이미 치트를 사용하고 있습니다. 당신과 동등한 권한 또는 상위 권한을 가지고 있기 때문에 빼앗지 못합니다.|r")))
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cff"+Player_Color[i2i]+(GetPlayerName(Player(i2i))+"|r |cff2c952c가|r |cffffbe0a치트|r|cff2c952c를 사용하지 못하게 했습니다.|r")))
+call ForceRemovePlayer(CHEATER,Player(i2i))
+set GT_Privilege[i2i]=0
+endif
+set i2i=i2i+1
+endloop
+endif
+endfunction
+function Getting_Explosion takes nothing returns nothing
+local integer i2i=0
+if GT_Privilege[GetPlayerId(GetTriggerPlayer())]<=49 then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(GetTriggerPlayer())+"님은 제한된 치트 권한을 가지고 있습니다.|r")))
+else
+loop
+exitwhen i2i>11
+if(GT_Privilege[i2i]>GT_Privilege[GetPlayerId(GetTriggerPlayer())])then
+call ND2P(Player(i2i),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(GetTriggerPlayer())+" 이(가) 이 방을 방폭하려고 시도합니다.|r")))
+return
+endif
+set i2i=i2i+1
+endloop
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cff646eff이 방은|r |cffffbe0a3초 후|r|cff646eff에 저절로 |cffffbe0a폭파|r|cff646eff됩니다.|r |cffff0000(취소따윈 못합니다. 이미 늦었어!)|r"+""))
+call PolledWait(1.00)
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000 3 |r"))
+call PolledWait(1.00)
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000 2 |r"))
+call PolledWait(1.00)
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000 1 |r"))
+call PolledWait(1.00)
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000Game Over!!|r"+""))
+call PolledWait(1.00)
+call EndGame(false)
+call ClearTextMessagesBJ(GetPlayersAll())
+endif
+endfunction
+function Getting_ResearchtechCheat2 takes nothing returns nothing
+if Selected_Check[(20*21)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+call SetPlayerTechResearchedSwap(GetResearched(),(GetPlayerTechCountSimple(GetResearched(),GetOwningPlayer(GetTriggerUnit()))+1),GetOwningPlayer(GetTriggerUnit()))
+endif
+endfunction
+function Getting_ResearchtechCheat takes integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*21)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+call ND2P(GetTriggerPlayer(),0,0,5.,("|cffffbe0a업그레이드 완료 모드|r|cff2c952c를 |cffff0000가동|r |cff2c952c합니다.|r |cffff0000(이후 연구한 업그레이드에만 해당됩니다.)|r"+" "))
+elseif fi2i==63 then
+set Selected_Check[(20*21)+GetPlayerId(GetTriggerPlayer())]=null
+call ND2P(GetTriggerPlayer(),0,0,5.,("|cffffbe0a업그레이드 완료 모드|r|cff2c952c를 |cffff0000해제|r |cff2c952c합니다.|r"+" "))
+endif
+endfunction
+function Getting_UnittechCheat2 takes nothing returns nothing
+if Selected_Check[(20*22)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+call CreateNUnitsAtLocFacingLocBJ(1,GetTrainedUnitType(),GetOwningPlayer(GetTriggerUnit()),GetUnitLoc(GetTriggerUnit()),GetRectCenter(bj_mapInitialPlayableArea))
+call IssuePointOrderByIdLoc(bj_lastCreatedUnit,851983,GetUnitRallyPoint(GetTriggerUnit()))
+call IssueImmediateOrderById(GetTriggerUnit(),851976)
+endif
+endfunction
+function Getting_UnittechCheat takes integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*22)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+call ND2P(GetTriggerPlayer(),0,0,5.,("|cffffbe0a유닛 완료 모드|r|cff2c952c를 |cffff0000가동|r |cff2c952c합니다.|r |cffff0000(이후 생성한 유닛에만 해당됩니다.)|r"+" "))
+else
+if fi2i==63 then
+set Selected_Check[(20*22)+GetPlayerId(GetTriggerPlayer())]=null
+call ND2P(GetTriggerPlayer(),0,0,5.,("|cffffbe0a유닛 완료 모드|r|cff2c952c를 |cffff0000해제|r |cff2c952c합니다.|r"+" "))
+endif
+endif
+endfunction
+function Getting_Sightshare takes nothing returns nothing
+local integer fi2i=1
+loop
+exitwhen fi2i>13
+if(IsPlayerAlly(udg_rcPlayer[GetPlayerId(GetTriggerPlayer())],Player(fi2i))==true)then
+call SetPlayerAllianceStateBJ(Player(fi2i),udg_rcPlayer[GetPlayerId(GetTriggerPlayer())],bj_ALLIANCE_ALLIED_VISION)
+else
+call SetPlayerAllianceStateBJ(Player(fi2i),udg_rcPlayer[GetPlayerId(GetTriggerPlayer())],bj_ALLIANCE_UNALLIED_VISION)
+endif
+set fi2i=fi2i+1
+endloop
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(GetTriggerPlayer())])+("|r |cff2c952c님과|r |cffff4500"+("중립을 포함한 모든 플레이어"+"|r |cff2c952c의|r |cffffbe0a시야를 공유|r|cff2c952c합니다.|r"))))+" "))
+endfunction
+function Getting_BulidCheat2 takes nothing returns nothing
+if Selected_Check[(20*5)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+if IsUnitType(GetTriggerUnit(),UNIT_TYPE_STRUCTURE)==true then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cff2c952c선택 |r|cffffbe0a건물|r|cff2c952c을 완성시켰습니다.|r"+" "))
+call UnitSetConstructionProgress(GetTriggerUnit(),100)
+call UnitSetUpgradeProgress(GetTriggerUnit(),100)
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! 건물이 아닙니다!|r"+" "))
+endif
+if GetTriggerPlayer()==Selected_Check[(20*15)+GetPlayerId(GetTriggerPlayer())]then
+set Selected_Check[(20*5)+GetPlayerId(GetTriggerPlayer())]=null
+set Selected_Check[(20*15)+GetPlayerId(GetTriggerPlayer())]=null
+endif
+endif
+endfunction
+function Getting_BulidCheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*5)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+elseif fi2i==63 then
+set Selected_Check[(20*5)+GetPlayerId(GetTriggerPlayer())]=null
+else
+set Selected_Check[(20*5)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set Selected_Check[(20*15)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+endif
+endfunction
+function Getting_Foodunlimitless takes integer fi2i returns nothing
+if fi2i==31 then
+set CUnitC[20+GetPlayerId(GetTriggerPlayer())]=GetPlayerId(GetTriggerPlayer())
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+GetPlayerName(udg_rcPlayer[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffffbe0a인구|r|cff2c952c를|r |cffffbe0a무제한|r|cff2c952c으로 변경했습니다.|r"))
+call EnableTrigger(ENDLESS)
+elseif fi2i==63 then
+set CUnitC[20+GetPlayerId(GetTriggerPlayer())]=100
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+GetPlayerName(udg_rcPlayer[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffffbe0a인구|r|cff2c952c를 다시|r |cffffbe0a사용|r|cff2c952c합니다.|r"))
+endif
+endfunction
+function Getting_Teleport2 takes nothing returns nothing
+if GetTriggerPlayer()==Selected_Check[(20*23)+GetPlayerId(GetTriggerPlayer())]then
+if(GetIssuedOrderIdBJ()==String2OrderIdBJ("patrol"))then
+call SetUnitPositionLoc(udg_rcUnit[GetPlayerId(GetTriggerPlayer())],GetOrderPointLoc())
+call SetUnitPositionLoc(udg_rcUnit[GetPlayerId(GetTriggerPlayer())],GetUnitLoc(GetOrderTargetUnit()))
+endif
+if GetTriggerPlayer()==Selected_Check[(20*33)+GetPlayerId(GetTriggerPlayer())]then
+set Selected_Check[(20*23)+GetPlayerId(GetTriggerPlayer())]=null
+set Selected_Check[(20*33)+GetPlayerId(GetTriggerPlayer())]=null
+endif
+endif
+endfunction
+function Getting_Teleport takes unit fu2u,integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*23)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+elseif fi2i==63 then
+set Selected_Check[(20*23)+GetPlayerId(GetTriggerPlayer())]=null
+else
+set Selected_Check[(20*23)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set Selected_Check[(20*33)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+endif
+endfunction
+function Getting_StopCheat2 takes nothing returns nothing
+local integer i2i=0
+if Selected_Check[(20*2)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+loop
+exitwhen(StopCheatUnit[i2i]==null)
+set i2i=i2i+1
+endloop
+if(IsUnitPausedBJ(GetTriggerUnit())==true)then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! 정지한 유닛입니다. 정지하지 않은 유닛을 선택해 주세요.|r"+" "))
+else
+if(GT_Privilege[GetPlayerId(GetOwningPlayer(GetTriggerUnit()))]>GT_Privilege[GetPlayerId(GetTriggerPlayer())])then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetUnitName(GetTriggerUnit())+" 은(는) 특권 치트 사용자의 유닛입니다! 정지할 수 없습니다!|r")))
+else
+set StopCheatUnit[i2i]=GetTriggerUnit()
+call PauseUnitBJ(true,GetTriggerUnit())
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(GetTriggerUnit()))+"|r |cff2c952c의|r |cffff0000"))+(GetUnitName(GetTriggerUnit())+("|r |cff2c952c을(를) |cffffbe0a정지|r|cff2c952c시킵니다.|r"))))
+endif
+endif
+if GetTriggerPlayer()==Selected_Check[(20*12)+GetPlayerId(GetTriggerPlayer())]then
+set Selected_Check[(20*2)+GetPlayerId(GetTriggerPlayer())]=null
+set Selected_Check[(20*12)+GetPlayerId(GetTriggerPlayer())]=null
+endif
+endif
+endfunction
+function Getting_StopCheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*2)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+elseif fi2i==63 then
+set Selected_Check[(20*2)+GetPlayerId(GetTriggerPlayer())]=null
+else
+set Selected_Check[(20*2)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set Selected_Check[(20*12)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+endif
+endfunction
+function Getting_Stopoff takes nothing returns nothing
+local integer i2i=0
+if(StopCheatUnit[i2i]!=null)then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000"+("정지시킨 모든 유닛"+"|r |cff2c952c을 다시|r |cffffbe0a움직이게|r |cff2c952c합니다.|r")))
+loop
+exitwhen StopCheatUnit[i2i]==null
+call PauseUnitBJ(false,StopCheatUnit[i2i])
+set StopCheatUnit[i2i]=null
+set i2i=i2i+1
+endloop
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff0000"+"주의! 정지된 유닛이 없습니다.")+"|r"))
+endif
+endfunction
+function Getting_DeleteCheat2 takes nothing returns nothing
+if Selected_Check[(20*3)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+if(GetTriggerUnit()==udg_rcUnit[GetPlayerId(GetTriggerPlayer())])then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetUnitName(GetTriggerUnit())+" 은(는) 치트 선택 유닛입니다! 삭제할 수 없습니다!|r")))
+else
+if(GT_Privilege[GetPlayerId(GetOwningPlayer(GetTriggerUnit()))]>GT_Privilege[GetPlayerId(GetTriggerPlayer())])then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetUnitName(GetTriggerUnit())+" 은(는) 특권 치트 사용자의 유닛입니다! 정지할 수 없습니다!|r")))
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(GetTriggerUnit()))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(GetTriggerUnit())+"|r |cff2c952c을(를) 게임 상에서|r |cffffbe0a삭제|r|cff2c952c합니다.|r")))
+call RemoveUnit(GetTriggerUnit())
+endif
+endif
+if GetTriggerPlayer()==Selected_Check[(20*13)+GetPlayerId(GetTriggerPlayer())]then
+set Selected_Check[(20*3)+GetPlayerId(GetTriggerPlayer())]=null
+set Selected_Check[(20*13)+GetPlayerId(GetTriggerPlayer())]=null
+endif
+endif
+endfunction
+function Getting_DeleteCheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*3)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+elseif fi2i==63 then
+set Selected_Check[(20*3)+GetPlayerId(GetTriggerPlayer())]=null
+else
+set Selected_Check[(20*3)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set Selected_Check[(20*13)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+endif
+endfunction
+function Getting_KillCheat2 takes nothing returns nothing
+if Selected_Check[(20*4)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+if(GetTriggerUnit()==udg_rcUnit[GetPlayerId(GetTriggerPlayer())])then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetUnitName(GetTriggerUnit())+" 은(는) 치트 선택 유닛입니다! 살해할 수 없습니다. 자살을 이용하세요!|r")))
+else
+if GT_Privilege[GetPlayerId(GetOwningPlayer(GetTriggerUnit()))]>GT_Privilege[GetPlayerId(GetTriggerPlayer())]then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetUnitName(GetTriggerUnit())+" 은(는) 특권 치트 사용자의 유닛입니다! 살해할 수 없습니다!|r")))
+else
+if(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]==null)then
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(GetTriggerUnit()))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(GetTriggerUnit())+"|r |cff2c952c을(를) 즉시|r |cffffbe0a살해|r|cff2c952c합니다.|r")))
+call KillUnit(GetTriggerUnit())
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(GetTriggerUnit()))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(GetTriggerUnit())+"|r |cff2c952c을(를) 즉시|r |cffffbe0a살해|r|cff2c952c합니다.|r |cffff0000( 선택 유닛이 있기에 돈과 경험치를 획득했습니다.)|r")))
+call UnitDamageTargetBJ(udg_rcUnit[GetPlayerId(GetTriggerPlayer())],GetTriggerUnit(),1000000000.00,ATTACK_TYPE_CHAOS,DAMAGE_TYPE_UNIVERSAL)
+call KillUnit(GetTriggerUnit())
+endif
+endif
+endif
+if GetTriggerPlayer()==Selected_Check[(20*14)+GetPlayerId(GetTriggerPlayer())]then
+set Selected_Check[(20*4)+GetPlayerId(GetTriggerPlayer())]=null
+set Selected_Check[(20*14)+GetPlayerId(GetTriggerPlayer())]=null
+endif
+endif
+endfunction
+function Getting_KillCheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*4)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+elseif fi2i==63 then
+set Selected_Check[(20*4)+GetPlayerId(GetTriggerPlayer())]=null
+else
+set Selected_Check[(20*4)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set Selected_Check[(20*14)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+endif
+endfunction
+function Getting_MapCheat takes integer fi2i returns nothing
+if fi2i==31 then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffffbe0a맵핵|r|cff2c952c을 |cffff0000가동|r |cff2c952c했습니다.|r |cffff0000(동맹은 켜지지 않습니다.)|r"+" "))
+call CreateFogModifierRectBJ(true,Player(PLAYER_NEUTRAL_AGGRESSIVE),FOG_OF_WAR_VISIBLE,GetEntireMapRect())
+call SetPlayerAllianceStateBJ(Player(PLAYER_NEUTRAL_AGGRESSIVE),GetTriggerPlayer(),bj_ALLIANCE_UNALLIED_VISION)
+elseif fi2i==63 then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffffbe0a맵핵|r|cff2c952c을|r |cffff0000중단|r |cff2c952c했습니다.|r"+" "))
+call SetPlayerAllianceStateBJ(Player(PLAYER_NEUTRAL_AGGRESSIVE),GetTriggerPlayer(),bj_ALLIANCE_UNALLIED)
+endif
+endfunction
+function Getting_AddAttack takes nothing returns nothing
+local integer i2i=GetPlayerId(GetOwningPlayer(GetEventDamageSource()))
+if GetEventDamageSource()==udg_rcUnit[i2i]and IsUnitIllusionBJ(GetEventDamageSource())!=true then
+call DisableTrigger(GetTriggeringTrigger())
+call UnitDamageTarget(udg_rcUnit[i2i],GetTriggerUnit(),EndlessR[180+i2i],true,false,ATTACK_TYPE_HERO,DAMAGE_TYPE_ENHANCED,WEAPON_TYPE_WHOKNOWS)
+call EnableTrigger(GetTriggeringTrigger())
+elseif udg_rcPlayer[i2i]==GetOwningPlayer(GetEventDamageSource())and DIALOG3[20+i2i]==true then
+call DisableTrigger(GetTriggeringTrigger())
+call UnitDamageTarget(GetEventDamageSource(),GetTriggerUnit(),EndlessR[140+i2i],true,false,ATTACK_TYPE_HERO,DAMAGE_TYPE_ENHANCED,WEAPON_TYPE_WHOKNOWS)
+call EnableTrigger(GetTriggeringTrigger())
+endif
+call DestroyTrigger(GetTriggeringTrigger())
+endfunction
+function Getting_BasicAttack takes nothing returns nothing
+local trigger t2t=CreateTrigger()
+call TriggerRegisterUnitEvent(t2t,GetTriggerUnit(),EVENT_UNIT_DAMAGED)
+call TriggerAddAction(t2t,function Getting_AddAttack)
+set t2t=null
+endfunction
+function Getting_AddDamageCheat takes unit fu2u,integer fi2i returns nothing
+set EndlessR[180+GetPlayerId(GetTriggerPlayer())]=fi2i
+call EnableTrigger(ADDDAMAGE)
+endfunction
+function Getting_AddDamageGroupCheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==0 then
+set DIALOG3[40+GetPlayerId(GetTriggerPlayer())]=false
+else
+set DIALOG3[20+GetPlayerId(GetTriggerPlayer())]=true
+endif
+set EndlessR[140+GetPlayerId(GetTriggerPlayer())]=fi2i
+call EnableTrigger(ADDDAMAGE)
+endfunction
+function Getting_ReduceDamageCheat2 takes nothing returns nothing
+local integer i2i=0
+loop
+exitwhen i2i>11
+if(GetTriggerUnit()==udg_rcUnit[i2i])then
+call SetUnitLifeBJ(GetTriggerUnit(),(GetUnitStateSwap(UNIT_STATE_LIFE,GetTriggerUnit())+(GetEventDamage()*(EndlessR[120+i2i]*0.01))))
+endif
+set i2i=i2i+1
+endloop
+endfunction
+function Getting_ReduceDamageCheat takes unit fu2u,integer fi2i returns nothing
+set EndlessR[120+GetPlayerId(GetTriggerPlayer())]=fi2i
+call EnableTrigger(REDUCE)
+endfunction
+function Getting_BloodCheat3 takes nothing returns nothing
+local integer i2i=0
+loop
+exitwhen i2i>11
+if(GetEventDamageSource()==udg_rcUnit[i2i]and GetEventDamage()>0.00)then
+call SetUnitLifeBJ(GetEventDamageSource(),(GetUnitStateSwap(UNIT_STATE_LIFE,GetEventDamageSource())+(EndlessR[100+i2i]*GetEventDamage())))
+endif
+set i2i=i2i+1
+endloop
+call DestroyTrigger(GetTriggeringTrigger())
+endfunction
+function Getting_BloodCheat2 takes nothing returns nothing
+local integer i2i=0
+local trigger t=CreateTrigger()
+call TriggerRegisterUnitEvent(t,GetTriggerUnit(),EVENT_UNIT_DAMAGED)
+loop
+exitwhen i2i>11
+if(GetAttacker()==udg_rcUnit[i2i])then
+call TriggerAddAction(t,function Getting_BloodCheat3)
+endif
+set i2i=i2i+1
+endloop
+endfunction
+function Getting_BloodCheat takes unit fu2u,integer fi2i returns nothing
+set EndlessR[100+GetPlayerId(GetTriggerPlayer())]=I2R(fi2i)*0.01
+call EnableTrigger(BLOOD)
+endfunction
+function Skilldam_Check takes nothing returns nothing
+if GetAttacker()==udg_rcUnit[GetPlayerId(GetOwningPlayer(GetAttacker()))]then
+set DIALOG3[60+GetPlayerId(GetOwningPlayer(GetAttacker()))]=true
+endif
+endfunction
+function Getting_Skilldamage2 takes nothing returns nothing
+local integer i2i=GetPlayerId(GetOwningPlayer(GetEventDamageSource()))
+if DIALOG3[60+i2i]==true then
+set DIALOG3[60+i2i]=false
+elseif GetEventDamage()>0.00 and GetEventDamageSource()==udg_rcUnit[i2i]then
+call DisableTrigger(GetTriggeringTrigger())
+call UnitDamageTarget(udg_rcUnit[i2i],GetTriggerUnit(),EndlessR[160+i2i],true,false,ATTACK_TYPE_HERO,DAMAGE_TYPE_ENHANCED,WEAPON_TYPE_WHOKNOWS)
+call EnableTrigger(GetTriggeringTrigger())
+elseif GetOwningPlayer(GetEventDamageSource())==udg_rcPlayer[i2i]and DIALOG3[40+i2i]==true then
+call DisableTrigger(GetTriggeringTrigger())
+call UnitDamageTarget(udg_rcUnit[i2i],GetTriggerUnit(),EndlessR[140+i2i],true,false,ATTACK_TYPE_HERO,DAMAGE_TYPE_ENHANCED,WEAPON_TYPE_WHOKNOWS)
+call EnableTrigger(GetTriggeringTrigger())
+endif
+call DestroyTrigger(GetTriggeringTrigger())
+endfunction
+function Skilldamage_Actions takes nothing returns nothing
+local trigger t2t=CreateTrigger()
+call TriggerRegisterUnitEvent(t2t,GetEnumUnit(),EVENT_UNIT_DAMAGED)
+call TriggerRegisterAnyUnitEventBJ(t2t,EVENT_PLAYER_UNIT_SPELL_CHANNEL)
+call TriggerAddAction(t2t,function Getting_Skilldamage2)
+set t2t=null
+endfunction
+function Skilldamage_Condition takes nothing returns boolean
+return(GetWidgetLife(GetFilterUnit())>0.405 and IsUnitType(GetFilterUnit(),UNIT_TYPE_MAGIC_IMMUNE)==false and GetUnitAbilityLevel(GetFilterUnit(),'Aloc')==0 and IsUnitEnemy(GetFilterUnit(),GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))==true)
+endfunction
+function Getting_Skilldamage takes nothing returns nothing
+set bj_wantDestroyGroup=true
+if GetTriggerUnit()==udg_rcUnit[GetPlayerId(GetTriggerPlayer())]then
+call ForGroupBJ(GetUnitsInRangeOfLocMatching(2500.,GetUnitLoc(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]),Condition(function Skilldamage_Condition)),function Skilldamage_Actions)
+endif
+endfunction
+function Getting_SkillAddDamageCheat takes unit fu2u,integer fi2i returns nothing
+set EndlessR[160+GetPlayerId(GetTriggerPlayer())]=fi2i
+call EnableTrigger(SKILLDAM)
+call EnableTrigger(SKILLDAM2)
+endfunction
+function Getting_SkillAddDamageGroupCheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==0 then
+set DIALOG3[40+GetPlayerId(GetTriggerPlayer())]=false
+else
+set DIALOG3[40+GetPlayerId(GetTriggerPlayer())]=true
+endif
+set EndlessR[140+GetPlayerId(GetTriggerPlayer())]=fi2i
+call EnableTrigger(SKILLDAM)
+call EnableTrigger(SKILLDAM2)
+endfunction
+function Getting_CopyCheat2 takes nothing returns nothing
+local integer i2i=1
+local integer i3i=1
+local unit u2u=GetTriggerUnit()
+if Selected_Check[(20*7)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+loop
+exitwhen i2i>CopyI[GetPlayerId(GetTriggerPlayer())]
+call CreateNUnitsAtLoA(1,GetUnitTypeId(u2u),udg_rcPlayer[GetPlayerId(GetTriggerPlayer())],GetUnitLoc(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]),bj_UNIT_FACING)
+call SetHeroLevelBJ(GetLastCreatedUnit(),GetHeroLevel(u2u),false)
+call SetHeroStr(GetLastCreatedUnit(),GetHeroStatBJ(bj_HEROSTAT_STR,u2u,false),true)
+call SetHeroAgi(GetLastCreatedUnit(),GetHeroStatBJ(bj_HEROSTAT_AGI,u2u,false),true)
+call SetHeroInt(GetLastCreatedUnit(),GetHeroStatBJ(bj_HEROSTAT_INT,u2u,false),true)
+loop
+exitwhen i3i>6
+call UnitAddItemByIdSwapped(GetItemTypeId(UnitItemInSlotBJ(u2u,i3i)),GetLastCreatedUnit())
+call SetItemCharges(GetLastCreatedItem(),GetItemCharges(UnitItemInSlotBJ(u2u,i3i)))
+call UnitDropItemSlotBJ(GetLastCreatedUnit(),GetLastCreatedItem(),i3i)
+set i3i=i3i+1
+endloop
+set i2i=i2i+1
+endloop
+call ND2P(GetTriggerPlayer(),0,0,5.00,((("|cffff4500"+(GetPlayerName(GetOwningPlayer(GetTriggerUnit()))+"|r |cff2c952c의|r |cffff0000"))+GetUnitName(GetTriggerUnit()))+(("|r |cff2c952c을(를)|r |cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+("|r |cff2c952c의 옆에|r |cffff0000"+(I2S(CopyI[GetPlayerId(GetTriggerPlayer())])+"기|r|cff2c952c만큼|r |cffffbe0a복제|r|cff2c952c했습니다.|r"))))))
+if GetTriggerPlayer()==Selected_Check[(20*17)+GetPlayerId(GetTriggerPlayer())]then
+set Selected_Check[(20*7)+GetPlayerId(GetTriggerPlayer())]=null
+set Selected_Check[(20*17)+GetPlayerId(GetTriggerPlayer())]=null
+endif
+endif
+endfunction
+function Getting_CopyCheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*7)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set CopyI[GetPlayerId(GetTriggerPlayer())]=1
+elseif fi2i==63 then
+set Selected_Check[(20*7)+GetPlayerId(GetTriggerPlayer())]=null
+else
+set Selected_Check[(20*7)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set Selected_Check[(20*17)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+if fi2i==0 then
+set CopyI[GetPlayerId(GetTriggerPlayer())]=1
+else
+set CopyI[GetPlayerId(GetTriggerPlayer())]=fi2i
+endif
+endif
+endfunction
+function Getting_Copy2Cheat2 takes nothing returns nothing
+local integer i2i=1
+local integer i3i=1
+local unit u2u=GetTriggerUnit()
+if Selected_Check[(20*8)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+loop
+exitwhen i2i>CopyI[20+GetPlayerId(GetTriggerPlayer())]
+call CreateNUnitsAtLoA(1,GetUnitTypeId(u2u),GetOwningPlayer(u2u),GetUnitLoc(u2u),bj_UNIT_FACING)
+call SetHeroLevelBJ(u2u,GetHeroLevel(u2u),false)
+call SetHeroStr(u2u,GetHeroStatBJ(bj_HEROSTAT_STR,u2u,false),true)
+call SetHeroAgi(u2u,GetHeroStatBJ(bj_HEROSTAT_AGI,u2u,false),true)
+call SetHeroInt(u2u,GetHeroStatBJ(bj_HEROSTAT_INT,u2u,false),true)
+loop
+exitwhen i3i>6
+call UnitAddItemByIdSwapped(GetItemTypeId(UnitItemInSlotBJ(u2u,i3i)),u2u)
+call SetItemCharges(GetLastCreatedItem(),GetItemCharges(UnitItemInSlotBJ(u2u,i3i)))
+call UnitDropItemSlotBJ(u2u,GetLastCreatedItem(),i3i)
+set i3i=i3i+1
+endloop
+set i2i=i2i+1
+endloop
+call ND2P(GetTriggerPlayer(),0,0,5.00,((("|cffff4500"+(GetPlayerName(GetOwningPlayer(GetTriggerUnit()))+"|r |cff2c952c의|r |cffff0000"))+GetUnitName(GetTriggerUnit()))+(("|r |cff2c952c을(를)|r |cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+("|r |cff2c952c의 옆에|r |cffff0000"+(I2S(CopyI[20+GetPlayerId(GetTriggerPlayer())])+"기|r|cff2c952c만큼|r |cffffbe0a복제|r|cff2c952c했습니다.|r"))))))
+if GetTriggerPlayer()==Selected_Check[(20*18)+GetPlayerId(GetTriggerPlayer())]then
+set Selected_Check[(20*8)+GetPlayerId(GetTriggerPlayer())]=null
+set Selected_Check[(20*18)+GetPlayerId(GetTriggerPlayer())]=null
+endif
+endif
+endfunction
+function Getting_Copy2Cheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*8)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set CopyI[20+GetPlayerId(GetTriggerPlayer())]=1
+elseif fi2i==63 then
+set Selected_Check[(20*8)+GetPlayerId(GetTriggerPlayer())]=null
+else
+set Selected_Check[(20*8)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set Selected_Check[(20*18)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+if fi2i==0 then
+set CopyI[20+GetPlayerId(GetTriggerPlayer())]=1
+else
+set CopyI[20+GetPlayerId(GetTriggerPlayer())]=fi2i
+endif
+endif
+endfunction
+function Getting_CopyItemCheat2 takes nothing returns nothing
+local item array CopyItem
+if Selected_Check[(20*9)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+if(UnitItemInSlotBJ(GetTriggerUnit(),ItemCopyI[GetPlayerId(GetTriggerPlayer())])==null)then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! 선택한 슬롯은 비어있습니다.|r"+""))
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,((("|cffff4500"+(GetPlayerName(GetOwningPlayer(GetTriggerUnit()))+"|r |cff2c952c님의|r |cffff0000"))+GetUnitName(GetTriggerUnit()))+("|r |cff2c952c의|r |cffff0000"+(I2S(ItemCopyI[GetPlayerId(GetTriggerPlayer())])+"|r|cff2c952c번째 인벤토리의 아이템을|r |cffffbe0a복제|r|cff2c952c했습니다.|r"))))
+set CopyItem[GetPlayerId(GetTriggerPlayer())]=UnitItemInSlotBJ(GetTriggerUnit(),ItemCopyI[GetPlayerId(GetTriggerPlayer())])
+call UnitAddItemByIdSwapped(GetItemTypeId(CopyItem[GetPlayerId(GetTriggerPlayer())]),udg_rcUnit[GetPlayerId(GetTriggerPlayer())])
+call SetItemCharges(GetLastCreatedItem(),GetItemCharges(UnitItemInSlotBJ(GetTriggerUnit(),ItemCopyI[GetPlayerId(GetTriggerPlayer())])))
+call UnitDropItemSlotBJ(udg_rcUnit[GetPlayerId(GetTriggerPlayer())],GetLastCreatedItem(),ItemCopyI[GetPlayerId(GetTriggerPlayer())])
+endif
+set Selected_Check[(20*9)+GetPlayerId(GetTriggerPlayer())]=null
+endif
+endfunction
+function Getting_CopyItemCheat takes unit fu2u,integer fi2i returns nothing
+set ItemCopyI[GetPlayerId(GetTriggerPlayer())]=fi2i
+set Selected_Check[(20*9)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+endfunction
+function Getting_DeleteItemCheat2 takes nothing returns nothing
+if Selected_Check[(20*10)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+if(UnitItemInSlotBJ(GetTriggerUnit(),ItemCopyI[20+GetPlayerId(GetTriggerPlayer())])==null)then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! 선택한 슬롯은 비어있습니다.|r"+""))
+else
+if GT_Privilege[GetPlayerId(GetOwningPlayer(GetTriggerUnit()))]>GT_Privilege[GetPlayerId(GetTriggerPlayer())]then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetUnitName(GetTriggerUnit())+" 은(는) 특권 치트 사용자의 유닛입니다! 아이템을 삭제 할 수 없습니다!|r")))
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,((("|cffff4500"+(GetPlayerName(GetOwningPlayer(GetTriggerUnit()))+"|r |cff2c952c님의|r |cffff0000"))+GetUnitName(GetTriggerUnit()))+("|r |cff2c952c의|r |cffff0000"+(I2S(ItemCopyI[20+GetPlayerId(GetTriggerPlayer())])+"|r|cff2c952c번째 인벤토리의 아이템을|r |cffffbe0a삭제|r|cff2c952c했습니다.|r"))))
+call RemoveItem(UnitItemInSlotBJ(GetTriggerUnit(),ItemCopyI[20+GetPlayerId(GetTriggerPlayer())]))
+endif
+endif
+endif
+set Selected_Check[(20*10)+GetPlayerId(GetTriggerPlayer())]=null
+endfunction
+function Getting_DeleteItemCheat takes unit fu2u,integer fi2i returns nothing
+set ItemCopyI[20+GetPlayerId(GetTriggerPlayer())]=fi2i
+set Selected_Check[(20*10)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+endfunction
+function Getting_ReiterationItemCheat takes unit fu2u,integer fi2i,integer fi3i returns nothing
+if UnitItemInSlotBJ(fu2u,fi2i)==null then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! 선택한 슬롯은 비어있습니다.|r"+""))
+else
+if(GetItemCharges(UnitItemInSlotBJ(fu2u,fi2i))==0)then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! 선택한 슬롯의 아이템은 중첩할 수 없는 종류의 아이템입니다.|r"+""))
+else
+if(fi3i<=0)then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! 아이템의 중첩 수를 0이나 음수로 할 수 없습니다.|r"+""))
+else
+call SetItemCharges(UnitItemInSlotBJ(fu2u,fi2i),fi3i)
+endif
+endif
+endif
+endfunction
+function Getting_KickCheat takes integer fi2i returns nothing
+set fi2i=fi2i-1
+if GT_Privilege[GetPlayerId(GetTriggerPlayer())]<49 then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(GetTriggerPlayer())+"님은 제한된 치트 권한을 가지고 있습니다.|r")))
+else
+if GT_Privilege[fi2i]>=GT_Privilege[GetPlayerId(GetTriggerPlayer())]then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(Player(fi2i))+"는 이미 치트를 사용하고 있습니다. 당신과 동등한 권한을 가지고 있기 때문에 빼앗지 못합니다.|r")))
+call ND2P(Player(fi2i),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(GetTriggerPlayer())+" 이(가) 당신을 강퇴하려고 시도했습니다.|r")))
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cff"+Player_Color[fi2i]+(GetPlayerName(Player(fi2i))+"|r |cffB4C3FF를|r |cffffbe0a강퇴|r|cffB4C3FF시켰습니다.|r")))
+call KickcheatP(Player(fi2i))
+endif
+endif
+endfunction
+function CheckI takes integer ITEM returns integer
+if ModuloInteger(ITEM,128)==57 then
+set ITEM=ITEM+8
+elseif ModuloInteger(ITEM,128)==90 then
+set ITEM=ITEM+214
+else
+set ITEM=ITEM+1
+endif
+return ITEM
+endfunction
+function Getting_AllItemCheat takes unit fu2u returns nothing
+local integer ITEM='I000'
+loop
+exitwhen ITEM>'I1ZZ'
+call CreateItemLoc(ITEM,GetUnitLoc(fu2u))
+set ITEM=CheckI(ITEM)
+endloop
+endfunction
+function Getting_ChatCheat2 takes nothing returns nothing
+local integer i2i=0
+loop
+exitwhen i2i>11
+if IsPlayerInForce(Player(i2i),Chat_Hear)then
+call ND2P(Player(i2i),0,0,15,"|cff"+Player_Color[GetPlayerId(GetTriggerPlayer())]+GetPlayerName(GetTriggerPlayer())+"|r : "+GetEventPlayerChatString())
+endif
+set i2i=i2i+1
+endloop
+endfunction
+function Getting_ChatCheat takes integer fi2i,player p2p returns nothing
+if fi2i==31 then
+call Getting_CheatActions(11,CHATTING,function Getting_ChatCheat2)
+call ForceAddPlayer(Chat_Hear,p2p)
+call ND2P(GetTriggerPlayer(),0,0,5.,("|cffDC6089모든 플레이어의 채팅을 봅니다."+""))
+elseif fi2i==63 then
+call ForceRemovePlayer(Chat_Hear,p2p)
+call ND2P(GetTriggerPlayer(),0,0,5.,("|cffDC6089모든 플레이어의 채팅을 그만봅니다."+""))
+endif
+endfunction
+function Getting_StopGameCheat takes integer fi2i returns nothing
+set fi2i=fi2i-1
+if GT_Privilege[GetPlayerId(GetTriggerPlayer())]<49 then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(GetTriggerPlayer())+"님은 제한된 치트 권한을 가지고 있습니다.|r")))
+else
+if(GT_Privilege[GetPlayerId(GetOwningPlayer(GetTriggerUnit()))]>GT_Privilege[GetPlayerId(GetTriggerPlayer())])then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(Player(fi2i))+"는 당신과 동등한 권한 또는 상위 권한을 가지고 있기 때문에 게임금지를 못합니다.|r")))
+call ND2P(Player(fi2i),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(GetTriggerPlayer())+" 이(가) 당신을 게임금지 하려고 시도했습니다.|r")))
+else
+call SetUserControlForceOff(GetForceOfPlayer(Player(fi2i)))
+endif
+endif
+endfunction
+function Getting_EndlessHealingCheat takes integer fi2i returns nothing
+if fi2i==31 then
+set CUnitC[40+GetPlayerId(GetTriggerPlayer())]=GetPlayerId(GetTriggerPlayer())
+set CUnitC[60+GetPlayerId(GetTriggerPlayer())]=GetPlayerId(GetTriggerPlayer())
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+"|r |cff2c952c의|r |cffffbe0a체력/마나|r|cff2c952c를|r |cffffbe0a무한|r|cff2c952c으로|r |cffffbe0a회복|r|cff2c952c시킵니다.|r")))
+call EnableTrigger(ENDLESS)
+elseif fi2i==63 then
+set CUnitC[40+GetPlayerId(GetTriggerPlayer())]=100
+set CUnitC[60+GetPlayerId(GetTriggerPlayer())]=100
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+"|r |cff2c952c의|r |cffffbe0a무한 체력/마나 회복|r |cff2c952c능력을|r |cffffbe0a제거|r|cff2c952c합니다.|r")))
+endif
+endfunction
+function Getting_EndlessCooltimeCheat takes integer fi2i returns nothing
+if fi2i==31 then
+set CUnitC[GetPlayerId(GetTriggerPlayer())]=GetPlayerId(GetTriggerPlayer())
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+"|r |cff2c952c의|r |cffffbe0a쿨타임|r|cff2c952c을|r |cffffbe0a무한|r|cff2c952c으로|r |cffffbe0a초기화|r|cff2c952c시킵니다.|r")))
+call EnableTrigger(ENDLESS)
+elseif fi2i==63 then
+set CUnitC[GetPlayerId(GetTriggerPlayer())]=100
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+"|r |cff2c952c의|r |cffffbe0a무한 쿨타임|r |cff2c952c능력을|r |cffffbe0a제거|r|cff2c952c합니다.|r")))
+endif
+endfunction
+function Getting_EndlessCooltimeGroupCheat takes integer fi2i returns nothing
+if fi2i==31 then
+set CUnitC[100+GetPlayerId(GetTriggerPlayer())]=GetPlayerId(GetTriggerPlayer())
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(GetTriggerPlayer())])+"|r |cff2c952c님의|r |cffff0000"))+("모든 유닛"+"|r |cff2c952c의|r |cffffbe0a쿨타임|r|cff2c952c을|r |cffffbe0a무한|r|cff2c952c으로|r |cffffbe0a초기화|r|cff2c952c시킵니다.|r")))
+call EnableTrigger(ENDLESS)
+elseif fi2i==63 then
+set CUnitC[100+GetPlayerId(GetTriggerPlayer())]=100
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(GetTriggerPlayer())])+"|r |cff2c952c님의|r |cffff0000"))+("모든 유닛"+"|r |cff2c952c의|r |cffffbe0a무한 쿨타임|r |cff2c952c능력을|r |cffffbe0a제거|r|cff2c952c합니다.|r")))
+endif
+endfunction
+function Getting_PrimitiveCreateCheat takes integer fi2i returns nothing
+local integer i2i=(15*(fi2i-1))+1
+loop
+exitwhen i2i>(15*fi2i)
+call CreateItemLoc(udg_rcItemType[i2i-1],Location(0,0))
+call ND2P(GetTriggerPlayer(),0,0,15.,(("|cffffbe0a"+I2S(i2i)+" - "))+(GetItemName(GetLastCreatedItem())))
+call RemoveItem(GetLastCreatedItem())
+set i2i=i2i+1
+endloop
+endfunction
+function Getting_AllStateCheat takes unit fu2u,integer fi2i returns nothing
+call ModifyHeroStat(bj_HEROSTAT_STR,fu2u,bj_MODIFYMETHOD_ADD,fi2i)
+call ModifyHeroStat(bj_HEROSTAT_AGI,fu2u,bj_MODIFYMETHOD_ADD,fi2i)
+call ModifyHeroStat(bj_HEROSTAT_INT,fu2u,bj_MODIFYMETHOD_ADD,fi2i)
+endfunction
+function Getting_MindcontrolCheat2 takes nothing returns nothing
+if Selected_Check[(20*6)+GetPlayerId(GetTriggerPlayer())]==GetTriggerPlayer()then
+if(GT_Privilege[GetPlayerId(GetOwningPlayer(GetTriggerUnit()))]>GT_Privilege[GetPlayerId(GetTriggerPlayer())])then
+call ND2P(GetTriggerPlayer(),0,0,5.00,("|cffff0000주의! "+(GetUnitName(GetTriggerUnit())+" 은(는) 특권 치트 사용자의 유닛입니다. 귀속할 수 없습니다.|r")))
+call ND2P(Player(GetPlayerId(GetOwningPlayer(GetTriggerUnit()))),0,0,5.00,("|cffff0000주의! "+(GetPlayerName(GetTriggerPlayer())+" 이(가) 당신의 유닛을 귀속하려고 했습니다!|r")))
+else
+call ND2P(GetTriggerPlayer(),0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(GetTriggerUnit()))+"|r |cff2c952c의|r |cffff0000"))+(GetUnitName(GetTriggerUnit())+("|r |cff2c952c을(를)|r |cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(GetTriggerPlayer())])+"|r |cff2c952c님에게로|r |cffffbe0a귀속|r|cff2c952c시킵니다.|r |cffff0000(색상 변경)|r")))))
+if CUnitC[120+GetPlayerId(GetTriggerPlayer())]<=15 and CUnitC[120+GetPlayerId(GetTriggerPlayer())]>=0 then
+call SetUnitOwner(GetTriggerUnit(),Player(CUnitC[120+GetPlayerId(GetTriggerPlayer())]),true)
+else
+call SetUnitOwner(GetTriggerUnit(),GetTriggerPlayer(),true)
+endif
+endif
+if GetTriggerPlayer()==Selected_Check[(20*16)+GetPlayerId(GetTriggerPlayer())]then
+set Selected_Check[(20*6)+GetPlayerId(GetTriggerPlayer())]=null
+set Selected_Check[(20*16)+GetPlayerId(GetTriggerPlayer())]=null
+endif
+endif
+endfunction
+function Getting_MindcontrolCheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==31 then
+set Selected_Check[(20*6)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+elseif fi2i==63 then
+set Selected_Check[(20*6)+GetPlayerId(GetTriggerPlayer())]=null
+else
+set Selected_Check[(20*6)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set Selected_Check[(20*16)+GetPlayerId(GetTriggerPlayer())]=GetTriggerPlayer()
+set CUnitC[120+GetPlayerId(GetTriggerPlayer())]=fi2i-1
+endif
+endfunction
+function Getting_InvincibleCheat takes unit fu2u,integer fi2i returns nothing
+if fi2i==31 then
+call SetUnitInvulnerable(fu2u,true)
+elseif fi2i==63 then
+call SetUnitInvulnerable(fu2u,false)
+endif
+endfunction
+function Getting_WOLFList takes integer fi2i returns nothing
+local integer i2i=(15*(fi2i-1))+1
+if fi2i==0 then
+call ND2P(GetTriggerPlayer(),0,0,15.00,("0이상의 숫자를 입력해주세요"))
+else
+loop
+exitwhen i2i>15*fi2i
+call ND2P(GetTriggerPlayer(),0,0,15.00,(I2S(i2i)+(" : |cffffbe0a"+Player_Color[20+i2i])))
+set i2i=i2i+1
+endloop
+endif
+endfunction
+function Getting_WOLFListCreate2 takes integer fi2i returns nothing
+local integer i2i=(15*(fi2i-1))+1
+if fi2i==0 then
+call ND2P(GetTriggerPlayer(),0,0,15.00,("0이상의 숫자를 입력해주세요"))
+else
+loop
+exitwhen i2i>15*fi2i
+call CreateItemLoc(CopyI[40+i2i],GetUnitLoc(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))
+call ND2P(GetTriggerPlayer(),0,0,7.00,("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+("|r |cff2c952c님의|r |cffff0000"+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+("|r |cff2c952c에게|r |cffffbe0a"+(Player_Color[20+i2i]+"|r|cff2c952c을|r |cffff0000 생성시켜|r |cff2c952c줍니다.")))))))
+set i2i=i2i+1
+endloop
+endif
+endfunction
+function Getting_WOLFListPart takes string fs2s returns nothing
+local integer i2i=1
+local integer i3i=0
+local integer i4i=0
+set i2i=1
+loop
+exitwhen i2i>20
+set i3i=(((40*(i2i-1))+0)+1)
+loop
+exitwhen i3i>(i2i*40)
+set i4i=0
+loop
+exitwhen i4i>50
+if(SubStringBJ(fs2s,15,99)==SubStringBJ(Part_STR[i3i],(0+i4i),((StringLength(SubStringBJ(fs2s,15,99))-1)+i4i)))then
+call CreateItemLoc(CopyI[40+i3i],GetUnitLoc(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))
+call ND2P(GetTriggerPlayer(),0,0,7.00,("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+("|r |cff2c952c님의|r |cffff0000"+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+("|r |cff2c952c에게|r |cffffbe0a"+(GetItemName(GetLastCreatedItem())+"|r|cff2c952c을|r |cffff0000 생성시켜|r |cff2c952c줍니다.")))))))
+endif
+set i4i=i4i+1
+endloop
+set i3i=i3i+1
+endloop
+call TriggerSleepAction(0.00)
+set i2i=i2i+1
+endloop
+endfunction
+function Getting_WOLFCreate takes string fs2s returns nothing
+local integer i2i=0
+loop
+exitwhen i2i>470
+if(SubStringBJ(fs2s,10,99)==Part_STR[i2i])then
+call CreateItemLoc(CopyI[40+i2i],GetUnitLoc(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))
+call ND2P(GetTriggerPlayer(),0,0,7.00,("|cffff4500"+(GetPlayerName(GetOwningPlayer(udg_rcUnit[GetPlayerId(GetTriggerPlayer())]))+("|r |cff2c952c님의|r |cffff0000"+(GetUnitName(udg_rcUnit[GetPlayerId(GetTriggerPlayer())])+("|r |cff2c952c에게|r |cffffbe0a"+(GetItemName(GetLastCreatedItem())+"|r|cff2c952c을|r |cffff0000 생성시켜|r |cff2c952c줍니다.")))))))
+return
+endif
+set i2i=i2i+1
+endloop
+endfunction
+function Getting_HelpCheat takes integer fi2i returns nothing
+if fi2i==1 then
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cffff0000[|r |cff646464 YS |cff646eff's Cheat|r |cff288C28 Set |r |cffffa500v3.8|r |cffff0000]|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,(" "+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@선택|r - |cffffA500선택|r |cff646464 영웅/유닛 치트 적용자를 선택합니다.|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@돈줘|r |cff646eff(숫)|r |cff646464 금 증가|r  |cff288C28@나무줘|r |cff646eff(숫) |r|cff646464 목재 증가|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@렙업|r |cff646eff(숫)|r |cff646464 영웅 레벨 증가|r  |cff288C28@스포|r |cff646eff(숫)|r |cff646464 영웅 스킬포인트 증가|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@힘/민/지|r |cff646eff(숫)|r |cff646464 영웅 힘/민/지 증가|r  |cff288C28@스텟|r |cff646eff(숫)|r |cff646464 영웅 올 스텟 증가|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@이속|r |cff646eff(숫)|r |cff646464 이속 변경|r |cffff0000(1~522)|r  |cff288C28@이속 초|r |cff646464 이속 초기값으로 변경|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28ㅎ|r |cff646464 체력/마나 모두 회복|r  |cff288C28ㅎ|r |cff646eff(숫)|r |cff646464 체력/마나 (숫)%만큼 회복|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28ㅋ|r |cff646464 쿨타임 초기화|r  |cff288C28@추뎀|r |cff646eff(숫)|r |cff646464 추뎀 설정|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@경험치|r |cff646eff(숫)|r |cff646464 경험치 획득 비율 변경|r  |cff288C28@경추|r |cff646eff(숫)|r |cff646464 경험치 추가|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@스뎀|r |cff646464 현재 스킬추뎀 확인|r  |cff288C28@스뎀|r |cff646eff(숫)|r |cff646464 스킬추뎀 설정|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@뎀감|r |cff646464 현재 추가뎀감 확인|r  |cff288C28@뎀감|r |cff646eff(숫)|r |cff646464 추가뎀감 설정|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@젠|r |cff646eff(숫)|r |cff646464 추가 체젠/마젠 설정|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@체젠|r |cff646eff(숫)|r |cff646464 추가 체젠 설정|r  |cff288C28@마젠|r |cff646eff(숫)|r |cff646464 추가 마젠 설정|r"+" "))
+elseif fi2i==2 then
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@올템|r - |cffffA500(알피지 일경우)|r |cff646464 자신 소유의 영웅 유닛 가운데에 모든아이템을 소환합니다.|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@템삭|r |cff646eff(숫)|r - |cffffA500선택|r |cff646464 선택 영웅의 해당 인벤토리의 아이템을 삭제|r |cffff0000(1~6)|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@템복|r |cff646eff(숫)|r - |cffffA500선택|r |cff646464 선택 영웅의 해당 인벤토리의 아이템을 복제|r |cffff0000(1~6)|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@템중|r |cff646eff(숫1)|r|cff288C28-|r|cff646eff(숫2)|r |cff646464 (숫1) 인벤토리의 아이템을 (숫2)개로 중첩|r |cffff0000(숫1 : 1~6)|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@확인|r |cff646464 플레이어 정보 표시|r  |cff288C28@강퇴|r |cff646eff(숫)|r |cff646464 해당 플레이어 강퇴|r |cffff0000(1~12)|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@자살|r |cff646464 선택 유닛 죽임|r  |cff288C28@부활|r |cff646464 선택 영웅 부활|r |cffff0000(유닛 부활 X)|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@삭제|r - |cffffA500선택|r |cff646464 선택 유닛 삭제|r |cffff0000(부활X)|r  |cff288C28@살해|r - |cffffA500선택|r |cff646464 선택 유닛 죽임|r |cffff0000(부활O)|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@삭제ON|r - |cffffA500선택|r |cff646464 선택 유닛 삭제|r |cffff0000(지속)|r  |cff288C28@삭제OFF|r |cff646464 삭제 모드 해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@살해ON|r - |cffffA500선택|r |cff646464 선택 유닛 살해|r |cffff0000(지속)|r  |cff288C28@살해OFF|r |cff646464 살해 모드 해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@복제|r - |cffffA500선택|r |cff646464 선택 유닛 복제|r  |cff288C28@복제|r |cff646eff(숫)|r - |cffffA500선택|r |cff646464 선택 유닛 (숫)만큼 복제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@복사 (숫)|r - |cffffA500|r |cff646464 특정 플레이어의유닛을 (숫)만큼 특정플레이어의 유닛으로 복제합니다.|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@복제ON|r - |cffffA500선택|r |cff646464 선택 유닛 복제|r |cffff0000(지속)|r  |cff288C28@복제OFF|r |cff646464 복제 모드 해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@귀속|r - |cffffA500선택|r |cff646464 선택 유닛 귀속|r  |cff288C28@귀속|r |cff646eff(숫)|r - |cffffA500선택|r |cff646464 선택 유닛 소유 변경|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@귀속ON|r |cff646eff(숫)|r - |cffffA500선택|r |cff646464 선택 유닛 귀속|r |cffff0000(지속)|r  |cff288C28@귀속OFF|r |cff646464 귀속 모드 해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@흡혈|r |cff646464 현재 흡혈량 확인|r  |cff288C28@흡혈|r |cff646eff(숫)|r |cff646464 공격시 흡혈 설정|r"+" "))
+elseif fi2i==3 then
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@방폭|r |cff646464 방을 폭파|r |cffff0000(취소 불가능)|r  |cff288C28@건설완료|r - |cffffA500선택|r |cff646464 건설중인 건물 완성|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@업완료|r |cff646464 ON/OFF|r |cffff0000업그레이드 시간없앰|r  |cff288C28@유닛완료|r - |cffffA500ON/OFF|r |cff646464 유닛생성 시간없앰|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@정지|r - |cffffA500선택|r |cff646464 선택 유닛 일시정지|r  |cff288C28@정지해제|r - |cffffA500선택|r |cff646464 선택 유닛 정지해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@이름|r |cff646eff(문자열)|r |cff646464 이름을 (문자열)로 변경|r  |cff288C28@청소|r |cff646464 화면상 텍스트 모두 제거|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@시야|r |cff646eff(숫)|r |cff646464 숫자만큼 카메라 줌 인/아웃|r |cffff0000(50~150)|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@시야고정|r |cff646464 카메라 시야 고정|r  |cff288C28@시야고정OFF|r |cff646464 카메라 시야 고정 해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@치트주기|r |cff646eff(숫)|r |cff646464 치트 권한 부여|r  |cff288C28@치트빼앗기|r |cff646eff(숫)|r |cff646464 치트 권한 빼앗기|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@치트금지|r |cff646eff(숫)|r |cff646464 치트 사용 금지|r  |cff288C28@치트금지|r |cff646effALL|r |cff646464 모두 치트 사용금지|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@치트금지OFF|r |cff646eff(숫)|r |cff646464 치트 사용 가능|r  |cff288C28@치트금지OFF|r |cff646effALL|r |cff646464 모두 치트 사용 가능|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@시야공유|r |cff646eff(숫)|r |cff646464 해당 플레이어 시야 공유|r  |cff288C28@시야공유ALL|r |cff646464 모든 플레이어 시야 공유|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@텔|r |cff646464 지정한 장소로 선택 영웅 1회 텔레포트|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@텔ON|r |cff646464 지정한 장소로 선택 영웅 텔레포트|r  |cff288C28@텔OFF|r |cff646464 텔레포트 능력 해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@맵핵ON|r |cff646464 맵핵 가동|r  |cff288C28@맵핵OFF|r |cff646464 맵핵 가동 중단|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@무적ON|r |cff646464 선택 유닛 무적|r  |cff288C28@무적OFF|r |cff646464 선택 유닛 무적 해제|r"+" "))
+elseif fi2i==4 then
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@점수삭제|r |cff646464 플레이어의 점수 제거|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@게임금지 (숫)|r |cff646464 플레이어 게임금지|r  |cff288C28@게임금지해제 (숫)|r |cff646464 플레이어 게임금지해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@인구무제한ON|r |cff646464 인구 무제한|r  |cff288C28@인구무제한OFF|r |cff646464 인구 다시 사용|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@무한힐ON|r |cff646464 선택 영웅 체/마나 소모안됨|r  |cff288C28@무한힐OFF|r |cff646464 무한 힐 능력 해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@무한쿨탐ON|r |cff646464 선택 유닛 쿨타임 제거|r  |cff288C28@무한쿨탐OFF|r |cff646464 무한 쿨타임 해제|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@목록 (숫)|r |cff646464 전 아이템 목록을 볼수있음|r  |cff288C28@목록생성 (숫)|r |cff646464 목록에 있는 아이템 생성|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@칸목록 (숫)|r - |cffffA500|r |cff646464 목록(숫) 에 있는 아이템 15개 생성.|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@부분생성 (아이템이름)|r - |cffffA500|r |cff646464 EX) @부분생성 검 // 검으로시작되는 아이템 전부 생성|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@전체쿨탐on,off|r - |cffffA500|r |cff646464 적.아군 플레이어의  쿨타임을 제로로만듭니다 (지속)|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@그룹쿨탐ON|r |cff646464 모든 유닛 쿨탐 무한|r  |cff288C28@그룹쿨탐OFF|r |cff646464 모든 유닛 쿨탐 유한|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@그룹체젠|r |cff646eff(숫)|r |cff646464 모든 유닛 체젠 추가|r  |cff288C28@그룹마젠|r |cff646eff(숫)|r |cff646464 모든 유닛 마젠 추가|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@그룹스뎀|r |cff646eff(숫)|r |cff646464 모든 유닛 스킬데미지 추가|r  |cff288C28@그룹추뎀|r |cff646eff(숫)|r |cff646464 모든 유닛 추가데미지 추가|r"+" "))
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cff288C28@그룹젠|r |cff646eff(숫)|r"+" "))
+else
+call ND2P(GetTriggerPlayer(),0,0,15.00,("|cffff0000@도움말 (숫) 의 형태의 명령어를 취해 주십시요. (1~4)|r"+""))
+endif
+endfunction
+function Getting_HeroListCheat takes integer fi2i returns nothing
+local integer i2i=(15*(fi2i-1))+1
+loop
+exitwhen i2i>(15*fi2i)
+call CreateNUnitsAtLoA(1,UnitCheat[i2i],Player(PLAYER_NEUTRAL_PASSIVE),GetRectCenter(GetPlayableMapRect()),bj_UNIT_FACING)
+call ND2P(GetTriggerPlayer(),0,0,15.,(("|cffffbe0a"+I2S(i2i)+" - "))+(GetUnitName(GetLastCreatedUnit())))
+call RemoveUnit(GetLastCreatedUnit())
+set i2i=i2i+1
+endloop
+endfunction
+function Special_Check takes integer i2i returns nothing
+local integer i3i=0
+loop
+exitwhen i3i>11
+if GT_Privilege[i2i]>=99 and GT_Privilege[i3i]==1 then
+set GT_Privilege[i3i]=0
+endif
+set i3i=i3i+1
+endloop
+endfunction
+function CheatUse takes nothing returns nothing
+local string s2s=GetEventPlayerChatString()
+local player p2p=GetTriggerPlayer()
+if(ffirst==0)then
+call DialogSetMessageBJ(DIALOG,"치트 텍스트 보임/안보임 선택")
+call DialogAddButtonBJ(DIALOG,"보임")
+set DIALOG2[1]=GetLastCreatedButtonBJ()
+call DialogAddButtonBJ(DIALOG,"안보임")
+set DIALOG2[2]=GetLastCreatedButtonBJ()
+loop
+exitwhen ffirst>11
+call Special_Check(ffirst)
+set ffirst=ffirst+1
+endloop
+endif
+if SubString(s2s,0,100)==Getting_atInsert(CheatString2)and(GT_Privilege[GetPlayerId(p2p)]!=0)and(GT_Privilege[GetPlayerId(p2p)]>=1)and(IsPlayerInForce(GetTriggerPlayer(),CHEATER)==false)then
+call ForceAddPlayer(CHEATER,p2p)
+set udg_rcPlayer[GetPlayerId(p2p)]=p2p
+call TriggerRegisterPlayerChatEvent(CHEATS,p2p,"",false)
+set GT_Privilege[GetPlayerId(GetTriggerPlayer())]=50
+call DialogDisplay(p2p,DIALOG,true)
+elseif CheatString2==SubString(s2s,0,100)and(GT_Privilege[GetPlayerId(p2p)]==1)then
+if p2p==GetLocalPlayer()then
+call Player(-1)
+endif
+elseif SubString(s2s,0,100)==Getting_hyphenInsert(CheatString)and(GT_Privilege[GetPlayerId(p2p)]==99)and(IsPlayerInForce(GetTriggerPlayer(),CHEATER)==false)then
+call ForceAddPlayer(CHEATER,p2p)
+set udg_rcPlayer[GetPlayerId(p2p)]=p2p
+call TriggerRegisterPlayerChatEvent(CHEATS,p2p,"",false)
+set GT_Privilege[GetPlayerId(p2p)]=99
+call DialogDisplay(p2p,DIALOG,true)
+endif
+set s2s=null
+set p2p=null
+endfunction
+function Cheatz0r takes nothing returns boolean
+return(IsPlayerInForce(GetTriggerPlayer(),CHEATER))
+endfunction
+function Cheatz takes player p2p,string s2s returns nothing
+local player n2n=GetOwningPlayer(udg_rcUnit[GetPlayerId(p2p)])
+local unit u2u=udg_rcUnit[GetPlayerId(p2p)]
+if SubString(s2s,1,8)=="돈줘 "then
+call ND2P(p2p,0,0,5.00,("|cffff0000"+(SubStringBJ(s2s,9,15)+"|r |cff2c952c만큼 현재|r |cffffbe0a금|r|cff2c952c에 추가합니다.|r")))
+call AdjustPlayerStateBJ(S2I(SubStringBJ(s2s,9,15)),p2p,PLAYER_STATE_RESOURCE_GOLD)
+elseif SubString(s2s,1,14)=="돈보내기 "then
+call ND2P(p2p,0,0,5.00,("|cffff0000"+(SubStringBJ(s2s,17,23)+"|r |cff2c952c만큼 현재|r |cffffbe0a금|r|cff2c952c에 추가합니다.|r")))
+call AdjustPlayerStateBJ(S2I(SubStringBJ(s2s,17,23)),Player(S2I(SubStringBJ(s2s,15,15))-1),PLAYER_STATE_RESOURCE_GOLD)
+elseif SubString(s2s,1,11)=="나무줘 "then
+call ND2P(p2p,0,0,5.00,("|cffff0000"+(SubStringBJ(s2s,12,18)+"|r |cff2c952c만큼 현재|r |cffffbe0a목재|r|cff2c952c에 추가합니다.|r")))
+call AdjustPlayerStateBJ(S2I(SubStringBJ(s2s,12,17)),p2p,PLAYER_STATE_RESOURCE_LUMBER)
+elseif SubString(s2s,1,17)=="나무보내기 "then
+call ND2P(p2p,0,0,5.00,("|cffff0000"+(SubStringBJ(s2s,20,26)+"|r |cff2c952c만큼 현재|r |cffffbe0a목재|r|cff2c952c에 추가합니다.|r")))
+call AdjustPlayerStateBJ(S2I(SubStringBJ(s2s,20,26)),Player(S2I(SubStringBJ(s2s,18,18))-1),PLAYER_STATE_RESOURCE_LUMBER)
+elseif SubString(s2s,1,7)=="선택"then
+call ND2P(p2p,0,0,5.00,("|cff5a5aff선택할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 클릭하세요.|r"+" "))
+call Getting_CheatEvent(1,SELECT,p2p)
+call Getting_CheatActions(1,SELECT,function Getting_Select)
+elseif SubString(s2s,1,7)=="정지"then
+call Getting_CheatEvent(2,STOP,p2p)
+call Getting_CheatActions(2,STOP,function Getting_StopCheat2)
+call Getting_StopCheat(NS3U(p2p,ONnOFF(SubString(s2s,7,100)),("|cff5a5aff정지시킬|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(지속)|r"+" "),(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 정지 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r")),("|cff5a5aff정지시킬|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(단발)|r"+" ")),ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,7)=="삭제"then
+call Getting_CheatEvent(3,DELETE,p2p)
+call Getting_CheatActions(3,DELETE,function Getting_DeleteCheat2)
+call Getting_DeleteCheat(NS3U(p2p,ONnOFF(SubString(s2s,7,100)),("|cff5a5aff게임 상에서 삭제할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(지속)|r"+" "),(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 삭제 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r")),("|cff5a5aff게임 상에서 삭제할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(단발)|r"+" ")),ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,7)=="살해"then
+call Getting_CheatEvent(4,KILLING,p2p)
+call Getting_CheatActions(4,KILLING,function Getting_KillCheat2)
+call Getting_KillCheat(NS3U(p2p,ONnOFF(SubString(s2s,7,100)),("|cff5a5aff살해 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(지속)|r"+" "),(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 삭제 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r")),("|cff5a5aff살해 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(단발)|r"+" ")),ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,13)=="건설완료"then
+call Getting_CheatEvent(5,BUILD,p2p)
+call Getting_CheatActions(5,BUILD,function Getting_BulidCheat2)
+call Getting_BulidCheat(NS3U(p2p,ONnOFF(SubString(s2s,13,100)),("|cff5a5aff완성시킬 |r|cffffbe0a건물|r|cff5a5aff을 선택하십시오.|r |cffff0000(지속)|r"+" "),(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 건설완료 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r")),("|cff5a5aff완성시킬 |r|cffffbe0a건물|r|cff5a5aff을 선택하십시오.|r |cffff0000(단발)|r"+" ")),ONnOFF(SubString(s2s,13,100)))
+elseif SubString(s2s,1,7)=="귀속"then
+call Getting_CheatEvent(6,MINDCONTROL,p2p)
+call Getting_CheatActions(6,MINDCONTROL,function Getting_MindcontrolCheat2)
+if SubStringBJ(s2s,8,9)=="on" or SubStringBJ(s2s,8,9)=="ON" or SubStringBJ(s2s,8,10)=="온" or SubStringBJ(s2s,8,10)=="off" or SubStringBJ(s2s,8,10)=="OFF" or SubStringBJ(s2s,8,12)=="오프" then
+call Getting_MindcontrolCheat(NS3U(p2p,ONnOFF(SubString(s2s,7,100)),(("|cffff4500"+GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)]))+"|r |cff5a5aff에게 귀속시킬|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(지속)|r"),(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 귀속 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r")),(("|cffff4500"+GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)]))+"|r |cff5a5aff에게 귀속시킬|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(단발)|r")),ONnOFF(SubString(s2s,7,100)))
+elseif S2I(SubStringBJ(s2s,8,100))<=12 then
+call Getting_MindcontrolCheat(NS3U(p2p,ONnOFF(SubString(s2s,7,100)),(("|cffff4500"+GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)]))+"|r |cff5a5aff에게 귀속시킬|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(지속)|r"),(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 귀속 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r")),(("|cffff4500"+GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)]))+"|r |cff5a5aff에게 귀속시킬|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(단발)|r")),ONnOFF(SubString(s2s,8,100)))
+endif
+elseif SubString(s2s,1,7)=="복제"then
+call Getting_CheatEvent(7,COPY,p2p)
+call Getting_CheatActions(7,COPY,function Getting_CopyCheat2)
+if SubStringBJ(s2s,8,9)=="on" or SubStringBJ(s2s,8,9)=="ON" or SubStringBJ(s2s,8,10)=="온" or SubStringBJ(s2s,8,10)=="off" or SubStringBJ(s2s,8,10)=="OFF" or SubStringBJ(s2s,8,12)=="오프" then
+call Getting_CopyCheat(NS3U(p2p,ONnOFF(SubString(s2s,7,100)),("|cff5a5aff복제 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(클릭한 유닛 옆에 복제됩니다, (지속))|r"+" "),("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 복제 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r"),("|cff5a5aff복제 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(클릭한 유닛 옆에 복제됩니다, (단발))|r"+" ")),ONnOFF(SubString(s2s,7,100)))
+elseif S2I(SubStringBJ(s2s,8,100))<=999 then
+call Getting_CopyCheat(NS3U(p2p,ONnOFF(SubString(s2s,8,100)),("|cff5a5aff복제 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(클릭한 유닛 옆에 복제됩니다, (지속))|r"+" "),("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 복제 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r"),("|cff5a5aff복제 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(클릭한 유닛 옆에 복제됩니다, (단발))|r"+" ")),ONnOFF(SubString(s2s,8,100)))
+endif
+elseif SubString(s2s,1,7)=="복사"then
+call Getting_CheatEvent(8,COPY2,p2p)
+call Getting_CheatActions(8,COPY2,function Getting_Copy2Cheat2)
+if SubStringBJ(s2s,8,9)=="on" or SubStringBJ(s2s,8,9)=="ON" or SubStringBJ(s2s,8,10)=="온" or SubStringBJ(s2s,8,10)=="off" or SubStringBJ(s2s,8,10)=="OFF" or SubStringBJ(s2s,8,12)=="오프" then
+call Getting_Copy2Cheat(NS3U(p2p,ONnOFF(SubString(s2s,7,100)),("|cff5a5aff복사 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(클릭한 유닛 옆에 복사됩니다, (지속))|r"+" "),("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 복사 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r"),("|cff5a5aff복사 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(클릭한 유닛 옆에 복사됩니다, (단발))|r"+" ")),ONnOFF(SubString(s2s,7,100)))
+elseif S2I(SubStringBJ(s2s,8,100))<=999 then
+call Getting_Copy2Cheat(NS3U(p2p,ONnOFF(SubString(s2s,8,100)),("|cff5a5aff복사 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(클릭한 유닛 옆에 복사됩니다, (지속))|r"+" "),("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+"|cff2c952c의 복사 모드를|r |cffffbe0a해제|r|cff2c952c합니다.|r"),("|cff5a5aff복사 할|r |cffffbe0a영웅|r|cff5a5aff/|r|cffffbe0a유닛|r|cff5a5aff/|r|cffffbe0a건물|r|cff5a5aff을 선택하세요.|r |cffff0000(클릭한 유닛 옆에 복사됩니다, (단발))|r"+" ")),ONnOFF(SubString(s2s,8,100)))
+endif
+elseif SubString(s2s,1,8)=="템복 "then
+call Getting_CheatEvent(9,COPYITEM,p2p)
+call Getting_CheatActions(9,COPYITEM,function Getting_CopyItemCheat2)
+call Getting_CopyItemCheat(NS2U(p2p,("|cff5a5aff복사할 아이템을 가지고 있는|r |cffffbe0a영웅|r|cff5a5aff을 선택하세요.|r"+" ")),ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,8)=="템삭 "then
+call Getting_CheatEvent(10,DELETEITEM,p2p)
+call Getting_CheatActions(10,DELETEITEM,function Getting_DeleteItemCheat2)
+call Getting_DeleteItemCheat(NS2U(p2p,("|cff5a5aff삭제할 아이템을 가지고 있는|r |cffffbe0a영웅|r|cff5a5aff을 선택하세요.|r"+" ")),ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,5)=="힘 "then
+call ModifyHeroStat(bj_HEROSTAT_STR,NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a힘|r|cff2c952c을|r |cffff0000"+(SubStringBJ(s2s,6,12)+"|r |cff2c952c만큼 증가시킵니다.|r"))))),bj_MODIFYMETHOD_ADD,S2I(SubStringBJ(s2s,6,12)))
+elseif SubString(s2s,1,5)=="민 "then
+call ModifyHeroStat(bj_HEROSTAT_AGI,NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a민첩|r|cff2c952c을|r |cffff0000"+(SubStringBJ(s2s,6,12)+"|r |cff2c952c만큼 증가시킵니다.|r"))))),bj_MODIFYMETHOD_ADD,S2I(SubStringBJ(s2s,6,12)))
+elseif SubString(s2s,1,5)=="지 "then
+call ModifyHeroStat(bj_HEROSTAT_INT,NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a지능|r|cff2c952c을|r |cffff0000"+(SubStringBJ(s2s,6,12)+"|r |cff2c952c만큼 증가시킵니다.|r"))))),bj_MODIFYMETHOD_ADD,S2I(SubStringBJ(s2s,6,12)))
+elseif SubString(s2s,1,8)=="스텟 "then
+call Getting_AllStateCheat(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+" |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a올 스텟|r|cff2c952c을|r |cffff0000"+(SubStringBJ(s2s,9,15)+"|r |cff2c952c만큼 증가시킵니다.|r"))))),ONnOFF(SubString(s2s,8,100)))
+elseif SubString(s2s,0,3)=="ㅋ"then
+call UnitResetCooldown(NS2U(p2p,("|cffff0000"+(GetUnitName(u2u)+"|r |cff2c952c의|r |cffffbe0a쿨타임|r|cff2c952c을 초기화시킵니다.|r"))))
+elseif SubString(s2s,0,3)=="ㅎ"then
+call Getting_Healing(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a체력과 마나|r|cff2c952c를|r |cffffbe0a"+(SubStringBJ(s2s,6,8)+"%|r |cff2c952c만큼 회복시킵니다.|r"))))),ONnOFF(SubString(s2s,2,100)))
+elseif SubString(s2s,1,7)=="마나"then
+call SetUnitManaPercentBJ(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a마나|r|cff2c952c를|r |cffffbe0a"+(SubStringBJ(s2s,9,11)+"%|r |cff2c952c만큼 회복시킵니다.|r"))))),100)
+elseif SubString(s2s,1,7)=="체력"then
+call SetUnitLifePercentBJ(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a체력|r|cff2c952c을|r |cffffbe0a"+(SubStringBJ(s2s,9,11)+"%|r |cff2c952c만큼 회복시킵니다.|r"))))),100)
+elseif SubString(s2s,1,8)=="체젠 "then
+call ND2P(p2p,0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(u2u))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a체젠|r|cff2c952c을|r "+("|cffff0000"+(SubStringBJ(s2s,9,13)+"|r|cff2c952c으로 변경합니다.|r |cffff0000(기본 체젠 포함 X)|r"))))))
+set EndlessR[GetPlayerId(p2p)]=(S2R(SubStringBJ(s2s,9,13))/ 2.00)
+call EnableTrigger(REENDLESS)
+elseif SubString(s2s,1,8)=="마젠 "then
+call ND2P(p2p,0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(u2u))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a마젠|r|cff2c952c을|r "+("|cffff0000"+(SubStringBJ(s2s,9,13)+"|r|cff2c952c으로 변경합니다.|r |cffff0000(기본 마젠 포함 X)|r"))))))
+set EndlessR[20+GetPlayerId(p2p)]=(S2R(SubStringBJ(s2s,9,13))/ 2.00)
+call EnableTrigger(REENDLESS)
+elseif SubString(s2s,1,5)=="젠 "then
+call ND2P(p2p,0,0,5.00,(("|cffff4500"+(GetPlayerName(GetOwningPlayer(u2u))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a체젠, 마젠|r|cff2c952c을|r "+("|cffff0000"+(SubStringBJ(s2s,6,10)+"|r|cff2c952c으로 변경합니다.|r |cffff0000(기본 체젠,마젠 포함 X)|r"))))))
+set EndlessR[GetPlayerId(p2p)]=(S2R(SubStringBJ(s2s,6,10))/ 2.00)
+set EndlessR[20+GetPlayerId(p2p)]=(S2R(SubStringBJ(s2s,6,10))/ 2.00)
+call EnableTrigger(REENDLESS)
+elseif SubString(s2s,1,14)=="그룹체젠 "then
+call ND2P(p2p,0,0,5.00,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c님의|r |cffff0000"))+("모든 유닛"+("|r |cff2c952c의|r |cffffbe0a체젠|r|cff2c952c을|r "+("|cffff0000"+(SubStringBJ(s2s,15,19)+"|r|cff2c952c으로 변경합니다.|r |cffff0000(기본 체젠 및 마젠 포함 X)|r"))))))
+set EndlessR[40+GetPlayerId(p2p)]=(S2R(SubStringBJ(s2s,15,19))/ 2.00)
+call EnableTrigger(REENDLESS)
+elseif SubString(s2s,1,14)=="그룹마젠 "then
+call ND2P(p2p,0,0,5.00,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c님의|r |cffff0000"))+("모든 유닛"+("|r |cff2c952c의|r |cffffbe0a마젠|r|cff2c952c을|r "+("|cffff0000"+(SubStringBJ(s2s,15,19)+"|r|cff2c952c으로 변경합니다.|r |cffff0000(기본 체젠 및 마젠 포함 X)|r"))))))
+set EndlessR[60+GetPlayerId(p2p)]=(S2R(SubStringBJ(s2s,15,19))/ 2.00)
+call EnableTrigger(REENDLESS)
+elseif SubString(s2s,1,11)=="그룹젠 "then
+call ND2P(p2p,0,0,5.00,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c님의|r |cffff0000"))+("모든 유닛"+("|r |cff2c952c의|r |cffffbe0a체젠, 마젠|r|cff2c952c을|r "+("|cffff0000"+(SubStringBJ(s2s,12,16)+"|r|cff2c952c으로 변경합니다.|r |cffff0000(기본 체젠 및 마젠 포함 X)|r"))))))
+set EndlessR[40+GetPlayerId(p2p)]=(S2R(SubStringBJ(s2s,12,16))/ 2.00)
+set EndlessR[60+GetPlayerId(p2p)]=(S2R(SubStringBJ(s2s,12,16))/ 2.00)
+call EnableTrigger(REENDLESS)
+elseif SubString(s2s,1,13)=="그룹쿨탐"then
+call Getting_EndlessCooltimeGroupCheat(ONnOFF(SubString(s2s,13,100)))
+elseif SubString(s2s,1,11)=="경험치 "then
+call SetPlayerHandicapXPBJ(GetOwningPlayer(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의 |r|cffffbe0a경험치 획득 비율|r|cff2c952c을|r |cffff0000"))+(SubStringBJ(s2s,12,16)+"%|r |cff2c952c로 설정합니다.|r")))),S2R(SubStringBJ(s2s,12,16)))
+elseif SubString(s2s,1,8)=="경추 "then
+call AddHeroXPSwapped(S2I(SubStringBJ(s2s,9,18)),NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a경험치|r|cff2c952c를|r |cffff0000"+(SubStringBJ(s2s,9,18)+"|r |cff2c952c만큼 추가시킵니다.|r"))))),false)
+elseif SubString(s2s,1,7)=="자살"then
+call KillUnit(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n))+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+"|r |cff2c952c을(를)|r |cffffbe0a자살|r|cff2c952c시킵니다.|r")))
+elseif SubString(s2s,1,7)=="부활"then
+call ReviveHeroLoc(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+"|r |cff2c952c을(를)|r |cffffbe0a부활|r|cff2c952c시킵니다.|r"))),GetUnitLoc(u2u),false)
+elseif SubString(s2s,1,8)=="렙업 "then
+call SetHeroLevelBJ(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a레벨|r|cff2c952c을|r |cffff0000"+(SubStringBJ(s2s,9,13)+"|r |cff2c952c만큼 상승시킵니다.|r"))))),(GetUnitLevel(u2u)+S2I(SubStringBJ(s2s,9,13))),false)
+elseif SubString(s2s,1,7)=="분신"then
+call Getting_Shaodw(ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,8)=="스포 "then
+call ModifyHeroSkillPoints(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a스킬 포인트|r|cff2c952c를|r |cffff0000"+(SubStringBJ(s2s,9,13)+"|r |cff2c952c만큼 추가합니다.|r"))))),bj_MODIFYMETHOD_ADD,S2I(SubStringBJ(s2s,9,13)))
+elseif SubString(s2s,1,8)=="이속 "then
+call Getting_Speed(ONnOFF(SubString(s2s,8,100)))
+elseif SubString(s2s,1,8)=="이름 "then
+call ND2P(p2p,0,0,5.00,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c의|r"))+(""+(" |cffffbe0a이름|r|cff2c952c을|r |cffff0000"+(SubStringBJ(s2s,9,50)+"|r |cff2c952c로 변경합니다.|r")))))
+call SetPlayerName(p2p,SubStringBJ(s2s,9,50))
+elseif SubString(s2s,1,7)=="확인"then
+call Getting_Check()
+elseif SubString(s2s,1,14)=="치트주기 "then
+call Getting_GivingCheat(ONnOFF(SubString(s2s,14,100)))
+elseif SubString(s2s,1,13)=="치트금지"then
+call Getting_BanCheat()
+elseif SubString(s2s,1,14)=="게임금지 "then
+call Getting_StopGameCheat(ONnOFF(SubString(s2s,14,100)))
+elseif SubString(s2s,1,20)=="게임금지해제 "then
+call SetUserControlForceOn(GetForceOfPlayer(Player(S2I(SubStringBJ(s2s,21,22))-1)))
+call ND2P(p2p,0,0,5.00,("|cffff0000"+(GetPlayerName(Player(S2I(SubStringBJ(s2s,21,22))))+"|r |cff2c952c의|r |cffffbe0a게임|r|cff2c952c을 가능하게 했습니다.|r")))
+elseif SubString(s2s,1,8)=="강퇴 "then
+call Getting_KickCheat(ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,7)=="방폭"then
+call Getting_Explosion()
+elseif SubString(s2s,1,13)=="정지해제"then
+call Getting_Stopoff()
+elseif SubString(s2s,1,8)=="시야 "then
+call SetCameraFieldForPlayer(p2p,CAMERA_FIELD_TARGET_DISTANCE,(20.*S2R(SubStringBJ(s2s,9,11))),1.)
+call ND2P(p2p,0,0,5,("|c00808080(플레이어의 시야를 변경하였습니다."+")|r"))
+elseif SubString(s2s,1,7)=="무적"then
+call Getting_InvincibleCheat(NS3U(p2p,ONnOFF(SubString(s2s,7,100)),(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+"|r |cff2c952c을(를)|r |cffffbe0a무적|r|cff2c952c이 되게 합니다.|r")),(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+"|r |cff2c952c의|r |cffffbe0a무적|r|cff2c952c을|r |cffffbe0a해제|r |cff2c952c합니다.|r")),""),ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,10)=="업완료"then
+call Getting_ResearchtechCheat(ONnOFF(SubString(s2s,10,100)))
+elseif SubString(s2s,1,13)=="유닛완료"then
+call Getting_UnittechCheat(ONnOFF(SubString(s2s,13,100)))
+elseif SubString(s2s,1,13)=="점수삭제"then
+call ND2P(p2p,0,0,5.00,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c님의|r |cffffbe0a점수|r|cff2c952c를|r |cffffbe0a삭제|r|cff2c952c했습니다.|r"))+" "))
+call SetPlayerOnScoreScreenBJ(false,p2p)
+elseif SubString(s2s,1,13)=="시야공유"then
+call Getting_Sightshare()
+elseif SubString(s2s,1,13)=="인구무한"then
+call Getting_Foodunlimitless(ONnOFF(SubString(s2s,13,100)))
+elseif SubString(s2s,1,14)=="유닛목록 "then
+call Getting_HeroListCheat(ONnOFF(SubString(s2s,14,100)))
+elseif SubString(s2s,1,14)=="유닛생성 "then
+call CreateNUnitsAtLoA(1,UnitCheat[S2I(SubStringBJ(s2s,15,17))],p2p,GetUnitLoc(u2u),bj_UNIT_FACING)
+elseif SubString(s2s,1,4)=="텔"then
+call Getting_Teleport(NS3U(p2p,ONnOFF(SubString(s2s,4,100)),(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+"|r |cff2c952c이(가) 지정한 장소로|r |cffffbe0a텔레포트|r|cff2c952c합니다.|r |cffff0000(지속, 패트롤을 이용해서 사용하세요.)|r")),(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+"|r |cff2c952c의|r |cffffbe0a텔레포트|r|cff2c952c 능력을 |cffffbe0a제거|r|cff2c952c합니다.|r")),(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+"|r |cff2c952c이(가) 지정한 장소로|r |cffffbe0a텔레포트|r|cff2c952c합니다.|r |cffff0000(단발, 패트롤을 이용해서 사용하세요.)|r"))),ONnOFF(SubString(s2s,4,100)))
+elseif SubString(s2s,1,7)=="맵핵"then
+call Getting_MapCheat(ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,8)=="추뎀 "then
+call Getting_AddDamageCheat(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a추가 데미지|r|cff2c952c를|r |cffff0000"+(SubString(s2s,8,16)+"|r |cff2c952c으로 변경합니다.|r"))))),ONnOFF(SubString(s2s,8,100)))
+elseif SubString(s2s,1,14)=="그룹추뎀 "then
+call Getting_AddDamageGroupCheat(NS2U(p2p,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c님의|r |cffff0000"))+("모든 유닛"+("|r |cff2c952c의|r |cffffbe0a추가 데미지|r|cff2c952c를|r |cffff0000"+(SubStringBJ(s2s,15,99))+"|r |cff2c952c으로 변경합니다.|r")))),ONnOFF(SubString(s2s,14,100)))
+elseif SubString(s2s,1,8)=="뎀감 "then
+call Getting_ReduceDamageCheat(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a추가 데미지 감소|r|cff2c952c를|r |cffff0000"+(SubString(s2s,8,16)+"%|r |cff2c952c로 변경합니다.|r"))))),ONnOFF(SubString(s2s,8,100)))
+elseif SubString(s2s,1,8)=="흡혈 "then
+call Getting_BloodCheat(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a흡혈량|r|cff2c952c을|r |cffff0000"+(SubString(s2s,8,100))+"%|r |cff2c952c로 변경합니다.|r")))),ONnOFF(SubString(s2s,8,100)))
+elseif SubString(s2s,1,8)=="스뎀 "then
+call Getting_SkillAddDamageCheat(NS2U(p2p,(("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+(GetUnitName(u2u)+("|r |cff2c952c의|r |cffffbe0a스킬 추가 데미지|r|cff2c952c를|r |cffff0000"+(SubString(s2s,8,100))+"|r |cff2c952c으로 변경합니다.|r")))),ONnOFF(SubString(s2s,8,100)))
+elseif SubString(s2s,1,14)=="그룹스뎀 "then
+call Getting_SkillAddDamageGroupCheat(NS2U(p2p,(("|cffff4500"+(GetPlayerName(udg_rcPlayer[GetPlayerId(p2p)])+"|r |cff2c952c님의|r |cffff0000"))+("모든 유닛"+("|r |cff2c952c의|r |cffffbe0a공격 및 스킬 추가 데미지|r|cff2c952c를|r |cffff0000"+(SubStringBJ(s2s,15,100))+"|r |cff2c952c으로 변경합니다.|r")))),ONnOFF(SubString(s2s,14,100)))
+elseif SubString(s2s,1,8)=="템중 "then
+call Getting_ReiterationItemCheat(NS2U(p2p,((("|cffff4500"+(GetPlayerName(n2n)+"|r |cff2c952c님의|r |cffff0000"))+GetUnitName(u2u))+("|r |cff2c952c의|r |cffff0000"+(SubStringBJ(s2s,9,9)+("|r|cff2c952c번째 인벤토리의 아이템의|r |cffffbe0a중첩 수|r|cff2c952c를|r |cffff0000"+(SubStringBJ(s2s,11,14)+"|r|cff2c952c개로 변경했습니다.|r")))))),ONnOFF(SubString(s2s,7,100)),ONnOFF(SubString(s2s,10,100)))
+elseif SubString(s2s,1,7)=="올템"then
+call Getting_AllItemCheat(NS2U(p2p,("|cffDC6089모든 아이템을 생성합니다."+".")))
+elseif SubString(s2s,1,10)=="템제거"then
+call EnumItemsInRectBJ(RectFromCenterSizeBJ(GetUnitLoc(u2u),650.00,650.00),function ItemRangeClear)
+elseif SubString(s2s,1,7)=="채팅"then
+call Getting_ChatCheat(ONnOFF(SubString(s2s,7,100)),p2p)
+elseif SubString(s2s,1,10)=="무한힐"then
+call Getting_EndlessHealingCheat(ONnOFF(SubString(s2s,10,100)))
+elseif SubString(s2s,1,13)=="무한쿨탐"then
+call Getting_EndlessCooltimeCheat(ONnOFF(SubString(s2s,13,100)))
+elseif SubString(s2s,1,14)=="원시생성 "then
+call CreateItemLoc(udg_rcItemType[ONnOFF(SubString(s2s,14,100))-1],GetUnitLoc(NS2U(p2p,("|c00808080아이템을 생성하였습니다.|r"))))
+elseif SubString(s2s,1,14)=="원시목록 "then
+call Getting_PrimitiveCreateCheat(ONnOFF(SubString(s2s,14,100)))
+elseif SubString(s2s,1,8)=="목록 "then
+call Getting_WOLFList(ONnOFF(SubString(s2s,7,100)))
+elseif SubString(s2s,1,14)=="목록생성 "then
+call CreateItemLoc(CopyI[40+S2I(SubStringBJ(s2s,15,18))],GetUnitLoc(u2u))
+call ND2P(p2p,0,0,7.,("|cffff4500"+(GetPlayerName(n2n)+("|r |cff2c952c님의|r |cffff0000"+(GetUnitName(u2u)+("|r |cff2c952c에게|r |cffffbe0a"+(Player_Color[20+S2I(SubStringBJ(s2s,15,17))]+"|r|cff2c952c을|r |cffff0000생성시켜|r |cff2c952c줍니다.")))))))
+elseif SubString(s2s,1,11)=="칸목록 "then
+call Getting_WOLFListCreate2(ONnOFF(SubString(s2s,10,100)))
+elseif SubString(s2s,1,14)=="부분생성 "then
+call Getting_WOLFListPart(s2s)
+elseif SubString(s2s,1,8)=="생성 "then
+call Getting_WOLFCreate(s2s)
+elseif SubString(s2s,1,10)=="텍스트"then
+call DialogDisplay(p2p,DIALOG,true)
+elseif SubString(s2s,1,11)=="도움말 "then
+call Getting_HelpCheat(ONnOFF(SubString(s2s,11,100)))
+endif
+set p2p=null
+set n2n=null
+set u2u=null
+set s2s=""
+endfunction
+function Getting_Commander takes player fp2p,string fs2s returns nothing
+local integer fi2i=StringLength(fs2s)
+local integer fi3i=0
+call Cheatz(fp2p,SubString(fs2s,fi3i,fi2i))
+endfunction
+function DirectCheat takes nothing returns nothing
+local player p2p=GetTriggerPlayer()
+local string s2s=GetEventPlayerChatString()
+call Getting_Commander(p2p,s2s)
+set p2p=null
+set s2s=""
+endfunction
+function C2A takes string c returns integer
+local integer i=0
+local string str="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+local string t
+loop
+set t=SubString(str,i,i+1)
+exitwhen t==null
+exitwhen t==c
+set i=i+1
+endloop
+if i<10 then
+return i+48
+elseif i<36 then
+return i+55
+endif
+return i+61
+endfunction
+function S2A takes string s returns integer
+if(StringLength(s)!=4)then
+return 0
+endif
+return((C2A(SubString(s,0,1))*16777216)+(C2A(SubString(s,1,2))*65536)+(C2A(SubString(s,2,3))*256)+(C2A(SubString(s,3,4))))
+endfunction
+function GT_SourceCode takes nothing returns nothing
+local string itemStr="cnobbracrlifciripmnaspshprvthvallgdhssildsumclsdsbchlhstbspdafacodefrag1ratcrat6rat9penrrst1mcouwardevtlajenrin1bgstkpinrhthhcunbelvcrysstelrde1rde2rde3clfmgcelrwizpgmapghefgdgpdivwlsdfgrdsrrcankhmnstwomspnvusrorwswdwshsfgrgfgfhsandsharpomnwildtotwsrespreswcycinfswillfgskhlstrej3whwdmodtratfdescckngtknoofrorde4k3m3k3m2bzbfkyghglskmgtkengsmortkymnk3m1kyblsclpbzbecnhnsorfshwdskrtsehrthledphedthbdkfwazhrwolgwtlggoprledgjpntgmfrcheskysnktrmphltrej1telsgobmgrslnflgrumptgxppginrej6rej4crdtshdtdtsbdrphlnrnoligoli2rugtstreamrcgvsmnspishenenvlsbokccmdtmmtmnsfovenshhnlurestpghbthvddlofirbfhrblbashcwshtmsoulsrtlgsourej5rej2sor1sorasor2sor3sor4sor5sor6sor7sor8sor9rnspskshstwasprnpspdosloshrssrbdhorlthdmrotsiwbresazarscram1ram3ram2ram4pamsarshaxasasblbragrat3dustuflgsculanfgkgaloflgbtstjdrncoslsfogklmmgldoocortlumtbartbsmtbaktfargemtfrhgfwssschlfrgdrde0sprefgunflagtmscmlstrhe3rdisgoldrspdrmanmanhrspsrhe1tintrhe2rspltin2tpowgomntdx2rma2texprwatrrebrreslmbrgforrre1guvirre2tst2"
+local integer i=0
+loop
+exitwhen i>245
+set udg_rcItemType[i]=S2A(SubString(itemStr,i*4,i*4+4))
+set i=i+1
+if ModuloInteger(i,30)==0 then
+call TriggerSleepAction(0.01)
+endif
+endloop
+endfunction
+function Cheat_Setting takes nothing returns nothing
+endfunction
+function CheatInstall takes nothing returns nothing
+local integer zzz=0
+local integer i2i=0
+loop
+exitwhen i2i>220
+set CUnitC[i2i]=100
+set i2i=i2i+1
+endloop
+loop
+exitwhen zzz>11
+set GT_Privilege[zzz]=1
+call TriggerRegisterPlayerChatEvent(ICHEAT,Player(zzz),"@",false)
+call TriggerRegisterPlayerChatEvent(CHATTING,Player(zzz),"",false)
+if Getting_SpecialList(zzz)==true then
+set GT_Privilege[zzz]=99
+endif
+set zzz=zzz+1
+endloop
+set Player_Color[0]="FF0303"
+set Player_Color[1]="0042FF"
+set Player_Color[2]="1CE6B9"
+set Player_Color[3]="540081"
+set Player_Color[4]="FFFF01"
+set Player_Color[5]="FE8A0E"
+set Player_Color[6]="20C000"
+set Player_Color[7]="E55BB0"
+set Player_Color[8]="959697"
+set Player_Color[9]="7EBFF1"
+set Player_Color[10]="106246"
+set Player_Color[11]="4E2A04"
+set UnitCheat[1]='h0AT'
+set UnitCheat[2]='h03T'
+set UnitCheat[3]='h092'
+set UnitCheat[4]='h07S'
+set UnitCheat[5]='h044'
+set UnitCheat[6]='h0DB'
+set UnitCheat[7]='h04B'
+set UnitCheat[8]='h01Y'
+set UnitCheat[9]='h04A'
+set UnitCheat[10]='h06W'
+set UnitCheat[11]='h063'
+set UnitCheat[12]='h095'
+set UnitCheat[13]='h05B'
+set UnitCheat[14]='h04I'
+set UnitCheat[15]='h04U'
+set UnitCheat[16]='h02W'
+set UnitCheat[17]='h087'
+set UnitCheat[18]='h0EY'
+set UnitCheat[19]='h047'
+set UnitCheat[20]='h04X'
+set UnitCheat[21]='h0IK'
+set UnitCheat[22]='h05S'
+set UnitCheat[23]='h07M'
+set UnitCheat[24]='h04L'
+set UnitCheat[25]='h05P'
+set UnitCheat[26]='h0BX'
+set UnitCheat[27]='h04V'
+set UnitCheat[28]='h0FI'
+set UnitCheat[29]='h0IA'
+set UnitCheat[30]='h04P'
+set UnitCheat[31]='h01J'
+set UnitCheat[32]='h0FO'
+set UnitCheat[33]='h0HJ'
+set UnitCheat[34]='h0EP'
+set UnitCheat[35]='h08N'
+set UnitCheat[36]='h0E7'
+set UnitCheat[37]='h0FV'
+call ExecuteFunc("Cheat_Setting")
+call ExecuteFunc("GT_SourceCode")
+call TriggerAddAction(ICHEAT,function CheatUse)
+call TriggerAddCondition(CHEATS,Condition(function Cheatz0r))
+call TriggerAddAction(CHEATS,function DirectCheat)
+call TriggerRegisterDialogEventBJ(DIALOGC,DIALOG)
+call TriggerAddAction(DIALOGC,function Cheat_Start_Setting)
+call TriggerRegisterAnyUnitEventBJ(RESEARCHTECH,EVENT_PLAYER_UNIT_RESEARCH_START)
+call TriggerAddAction(RESEARCHTECH,function Getting_ResearchtechCheat2)
+call TriggerRegisterAnyUnitEventBJ(UNITTECH,EVENT_PLAYER_UNIT_TRAIN_START)
+call TriggerAddAction(UNITTECH,function Getting_UnittechCheat2)
+call TriggerRegisterAnyUnitEventBJ(TELEPORT,EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER)
+call TriggerRegisterAnyUnitEventBJ(TELEPORT,EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER)
+call TriggerRegisterAnyUnitEventBJ(TELEPORT,EVENT_PLAYER_UNIT_ISSUED_ORDER)
+call TriggerAddAction(TELEPORT,function Getting_Teleport2)
+call DisableTrigger(ENDLESS)
+call TriggerRegisterTimerEventPeriodic(ENDLESS,.33)
+call TriggerAddAction(ENDLESS,function Getting_Endless)
+call DisableTrigger(REENDLESS)
+call TriggerRegisterTimerEventPeriodic(REENDLESS,.50)
+call TriggerAddAction(REENDLESS,function Getting_REEndless)
+call DisableTrigger(ADDDAMAGE)
+call TriggerRegisterAnyUnitEventBJ(ADDDAMAGE,EVENT_PLAYER_UNIT_ATTACKED)
+call TriggerAddAction(ADDDAMAGE,function Getting_BasicAttack)
+call DisableTrigger(REDUCE)
+call TriggerAddAction(REDUCE,function Getting_ReduceDamageCheat2)
+call DisableTrigger(BLOOD)
+call TriggerAddAction(BLOOD,function Getting_BloodCheat2)
+call DisableTrigger(SKILLDAM)
+call TriggerRegisterAnyUnitEventBJ(SKILLDAM,EVENT_PLAYER_UNIT_SPELL_CAST)
+call TriggerAddAction(SKILLDAM,function Getting_Skilldamage)
+call DisableTrigger(SKILLDAM2)
+call TriggerRegisterAnyUnitEventBJ(SKILLDAM2,EVENT_PLAYER_UNIT_ATTACKED)
+call TriggerAddAction(SKILLDAM2,function Skilldam_Check)
+call DestroyTrigger(GetTriggeringTrigger())
+endfunction
