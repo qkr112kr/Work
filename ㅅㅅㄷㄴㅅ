@@ -1088,8 +1088,10 @@ boolexpr bd=null
 unit array udg_rcUnit
 player array udg_rcPlayer
 integer array GT_Privilege
+integer Before_Time=1
+integer After_Time=3
 string CheatString="@A"
-string CheatString2="@갯힝"
+string CheatString2="@디젤칫"
 string array Player_Color
 string array Part_STR
 player array CheatActionCheck
@@ -1171,3 +1173,4 @@ trigger trigger006=null
 trigger trigger007=null
 force force001=null
 trigger SELECTA=null
+integer array UnitCheat
