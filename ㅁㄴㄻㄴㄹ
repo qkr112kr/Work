@@ -1,0 +1,20 @@
+function CreateNUnitsAtLoA takes integer count,integer unitId,player whichPlayer,location loc,real face returns group
+if C_W2 or C_W4 then
+if unitId=='e000' or unitId=='e001' or unitId=='e002' or unitId=='e003' or unitId=='e004' or unitId=='e005' or unitId=='ewsp' then
+set count=count*GT_WSP
+endif
+endif
+if C_Upgrade3 then
+if unitId=='h05O' then
+set count=2
+endif
+endif
+call GroupClear(bj_lastCreatedGroup)
+loop
+set count=count-1
+exitwhen count<0
+call CreateUnitAtLocSaveLast(whichPlayer,unitId,loc,face)
+call GroupAddUnit(bj_lastCreatedGroup,bj_lastCreatedUnit)
+endloop
+return bj_lastCreatedGroup
+endfunction
